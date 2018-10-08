@@ -1,10 +1,3 @@
-/*
- * 지수가 한 부분
-모터추가
-모터 돌리기 전 딜레이
-코인 넣으면 동작
- */
-
 #include <Servo.h>
 
 #define NUMBER_OF_SHIFT_CHIPS   1     /* Width of data (how many ext lines).*/
@@ -13,9 +6,10 @@
 #define POLL_DELAY_MSEC   1000 /* You will need to change the "int" to "long" If the NUMBER_OF_SHIFT_CHIPS is higher than 2.*/
 #define BYTES_VAL_T unsigned int
 
-// 지수가 선언한 부분: 스프링이 돌아가는 시간과 스피드
-#define SPRING_DELAY 2000
-#define SPRING_SPEED 180
+#define SPRING_DELAY 1000
+
+#define SPRING_COUNTER_CLOCK 180
+#define SPRING_CLOCK 0;
 
 int ploadPin        = 8;  // Connects to Parallel load pin the 165
 int clockEnablePin  = 9;  // Connects to Clock Enable pin the 165
@@ -70,13 +64,11 @@ void setup() {
 }
 
 void loop() {
-
-  
   coin_state = digitalRead(coin_pin);
 
   if(coin_state != last_coin_state){
     if(coin_state == LOW){
-      coinCounter++;
+      coinCounter += 2; // one for rotate, one for stop
       Serial.print("coin count = ");
       Serial.println(coinCounter);
     }
@@ -120,86 +112,81 @@ void loop() {
 /*for button register*/
 BYTES_VAL_T read_shift_regs()
 {
-    long bitVal;
-    BYTES_VAL_T bytesVal = 0;
+  long bitVal;
+  BYTES_VAL_T bytesVal = 0;
 
-    /* Trigger a parallel Load to latch the state of the data lines,
+  /* Trigger a parallel Load to latch the state of the data lines,
+  */
+  digitalWrite(clockEnablePin, HIGH);
+  digitalWrite(ploadPin, LOW);
+  delayMicroseconds(PULSE_WIDTH_USEC);
+  digitalWrite(ploadPin, HIGH);
+  digitalWrite(clockEnablePin, LOW);
+
+  /* Loop to read each bit value from the serial out line
+   * of the SN74HC165N.
+  */
+  for(int i = 0; i < DATA_WIDTH; i++)
+  {
+    bitVal = digitalRead(dataPin);
+
+    /* Set the corresponding bit in bytesVal.
     */
-    digitalWrite(clockEnablePin, HIGH);
-    digitalWrite(ploadPin, LOW);
+    bytesVal |= (bitVal << ((DATA_WIDTH-1) - i));
+
+    /* Pulse the Clock (rising edge shifts the next bit).
+    */
+    digitalWrite(clockPin, HIGH);
     delayMicroseconds(PULSE_WIDTH_USEC);
-    digitalWrite(ploadPin, HIGH);
-    digitalWrite(clockEnablePin, LOW);
-
-    /* Loop to read each bit value from the serial out line
-     * of the SN74HC165N.
-    */
-    for(int i = 0; i < DATA_WIDTH; i++)
-    {
-        bitVal = digitalRead(dataPin);
-
-        /* Set the corresponding bit in bytesVal.
-        */
-        bytesVal |= (bitVal << ((DATA_WIDTH-1) - i));
-
-        /* Pulse the Clock (rising edge shifts the next bit).
-        */
-        digitalWrite(clockPin, HIGH);
-        delayMicroseconds(PULSE_WIDTH_USEC);
-        digitalWrite(clockPin, LOW);
-    }
-
-    return(bytesVal);
+    digitalWrite(clockPin, LOW);
+  }
+  return(bytesVal);
 }
 
 /* Dump the list of zones along with their current status.
 */
-void display_pin_values()
-{
-    
-    for(int i = 0; i < DATA_WIDTH; i++)
-    {
-      
-        if((pinValues >> i) & 1){
-                   
-          if((i+1) == 3){
-            servo_3.write(90);
-            delay(SPRING_DELAY);
-          }
-          else if((i+1) == 6){
-            servo_6.write(90);
-            delay(SPRING_DELAY);
-          }
-          else{
-            set_ch_pos_spd(i+1, 3850, 50);
-          }
-          
+void display_pin_values(){
+  for(int i = 0; i < DATA_WIDTH; i++){
+    int channel = i+1;
+       
+    if((pinValues >> i) & 1){     
+      if(channel == 3){
+        servo_3.write(90);
+      }
+      else if(channel == 6){  
+        servo_6.write(90);
+      }
+      else{
+        set_ch_pos_spd(i+1, 3850, 50);  
+      }    
+    }
+    else{
+      if((i+1) == 3){
+        servo_3.write(SPRING_CLOCK);
+        delay(SPRING_DELAY);
+      }
+      else if((i+1) == 6){
+        servo_6.write(SPRING_CLOCK);
+        delay(SPRING_DELAY);
+      }
+      else{
+        if(channel == 1 || channel == 2){
+        set_ch_pos_spd(i+1, 7300, 50);
         }
         else{
-          delay(500);
-          
-          if((i+1) == 3){
-            servo_3.write(SPRING_SPEED);
-            delay(SPRING_DELAY);
-          }
-          else if((i+1) == 6){
-            servo_6.write(SPRING_SPEED);
-            delay(SPRING_DELAY);
-          }
-          else{
           set_ch_pos_spd(i+1, 400, 50);
-          }
-          
         }
+      }
     }
+  }
 }
 
 /*for motor expand module*/
 void on_off_motor(unsigned char channel, unsigned char on){
   unsigned char first_byte = 0;
   first_byte = 0b11000000|channel;
-  Serial.write(first_byte);
-  Serial.write(on);
+  //Serial.write(first_byte);   //Serial.write() 모두 주석처리 했으니 이상하면 풀어야 함
+  //Serial.write(on);
 }
 
 void set_ch_pos_spd(unsigned char channel, unsigned int position, unsigned char velocity){
@@ -211,8 +198,8 @@ void set_ch_pos_spd(unsigned char channel, unsigned int position, unsigned char 
   high_byte = (position>>6) & 0b01111111;
   low_byte = position & 0b00111111;
 
-  Serial.write(first_byte);
-  Serial.write(high_byte);
-  Serial.write(low_byte);
-  Serial.write(velocity);
+  //Serial.write(first_byte);
+  //Serial.write(high_byte);
+  //Serial.write(low_byte);
+  //Serial.write(velocity);
 }
