@@ -69,13 +69,16 @@ void setup() {
   servo_6.attach(servo_6_pin);
   servo_9.attach(servo_9_pin);
   
+  servo_3.write(90);
+  servo_6.write(90);
+  servo_9.write(90);
+  
   Serial.println("Set Finish");
+  Serial.println("Please Insert the Coin");
 }
 
 void loop() {
   coin_state = digitalRead(coin_pin);
-
-  Serial.println("Please Insert the Coin");
   
   if(coin_state != last_coin_state){
     if(coin_state == LOW){
@@ -97,12 +100,18 @@ void loop() {
       Serial.println(coinCounter);
    
       delay(150);
-      servo_9.write(180);
+      //servo_9.write;(180);
+      servo_3.write(180);
       delay(1000);  // 9번째 모터가 돌아가는 시간
       coinCounter--;
       Serial.print("coin count = ");
       Serial.println(coinCounter);
-       servo_9.write(90);
+      //servo_9.write(90);
+      servo_3.write(90);
+
+      if(coinCounter == 0){
+         Serial.println("Please Insert the Coin");
+      }
     }
     pinValues = read_shift_regs();
   
@@ -112,6 +121,9 @@ void loop() {
       Serial.println(coinCounter);
       display_pin_values();
       oldPinValues = pinValues;
+      if(coinCounter == 0){
+        Serial.println("Please Insert the Coin");
+      }
     }  
     delay(POLL_DELAY_MSEC);
   }
@@ -158,6 +170,20 @@ void display_pin_values(){
     int channel = i+1;
        
     if((pinValues >> i) & 1){     
+      if(channel == 1){  set_ch_pos_spd(7, 3850, 50);  }
+      else if(channel == 2){ 
+        servo_6.write(90);
+      }
+      else if(channel == 3){  set_ch_pos_spd(5, 3850, 50);  }
+      else if(channel == 4){  set_ch_pos_spd(8, 3850, 50);  }
+      else if(channel == 5){  set_ch_pos_spd(4, 3850, 50);  }
+      else if(channel == 6){  
+        servo_9.write(90);  
+      }
+      else if(channel == 7){  set_ch_pos_spd(1, 3850, 50);  }
+      else if(channel == 8){  set_ch_pos_spd(2, 3850, 50);  }
+      
+      /*
       if(channel == 3){
         servo_3.write(90);
       }
@@ -166,14 +192,29 @@ void display_pin_values(){
       }
       else{
         set_ch_pos_spd(i+1, 3850, 50);  
-      }    
+      }*/    
     }
     else{
-      if((i+1) == 3){
+      if(channel == 1){  set_ch_pos_spd(7, 400, 50);  }
+      else if(channel == 2){ 
+        servo_6.write(SPRING_CLOCK);
+        delay(SPRING_DELAY);
+      }
+      else if(channel == 3){  set_ch_pos_spd(5, 400, 50);  }
+      else if(channel == 4){  set_ch_pos_spd(8, 400, 50);  }
+      else if(channel == 5){  set_ch_pos_spd(4, 400, 50);  }
+      else if(channel == 6){  
+        servo_9.write(SPRING_CLOCK);
+        delay(SPRING_DELAY);  
+      }
+      else if(channel == 7){  set_ch_pos_spd(1, 400, 50);  }
+      else if(channel == 8){  set_ch_pos_spd(2, 400, 50);  }
+      /*
+      if(channel == 3){
         servo_3.write(SPRING_CLOCK);
         delay(SPRING_DELAY);
       }
-      else if((i+1) == 6){
+      else if(channel == 6){
         servo_6.write(SPRING_CLOCK);
         delay(SPRING_DELAY);
       }
@@ -184,7 +225,7 @@ void display_pin_values(){
         else{
           set_ch_pos_spd(i+1, 400, 50);
         }
-      }
+      }*/
     }
   }
 }
