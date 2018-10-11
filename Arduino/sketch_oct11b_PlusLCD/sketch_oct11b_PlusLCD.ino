@@ -1,6 +1,5 @@
-
-
-//#include <LiquidCrystal_I2C.h>
+#include <Wire.h>  // Comes with Arduino IDE
+#include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
 #define NUMBER_OF_SHIFT_CHIPS   1     /* Width of data (how many ext lines).*/
@@ -14,7 +13,7 @@
 #define SPRING_COUNTER_CLOCK 180
 #define SPRING_CLOCK 0
 
-//LiquidCrystal_I2C lcd(0x27,16,2);     // Access address: 0x3F or 0x27
+LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Set the LCD I2C address
 
 int ploadPin        = 8;  // Connects to Parallel load pin the 165
 int clockEnablePin  = 9;  // Connects to Clock Enable pin the 165
@@ -42,12 +41,13 @@ Servo servo_3, servo_6, servo_9;
 
 void setup() {
   Serial.begin(9600);
-
-  //lcd.begin();
-  //lcd.backlight();
-  //lcd.print("Cosmetics Vending Machine");
-  //lcd.display();
-  
+  lcd.begin(16,2);   // initialize the lcd for 16 chars 2 lines, turn on backlight
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("Cosmetics");
+  lcd.setCursor(0,1);
+  lcd.print("Vending Machine");
+  delay(1000);  
   
   /* Initialize our digital pins...*/
   pinMode(ploadPin, OUTPUT);
@@ -71,22 +71,30 @@ void setup() {
   servo_6.attach(servo_6_pin);
   servo_9.attach(servo_9_pin);
   
-  servo_3.write(90);
-  servo_6.write(90);
-  servo_9.write(90);
+  //stopAllMotor();  
   
   Serial.println("Set Finish");
   Serial.println("Please Insert the Coin");
+
+  lcd.setCursor(0,0);
+  lcd.print("Please       ");
+  lcd.setCursor(0,1);
+  lcd.print("insert coin : ");
+  lcd.print(coinCounter/2);
 }
 
 void loop() {
   coin_state = digitalRead(coin_pin);
-  
+  stopAllMotor();
   if(coin_state != last_coin_state){
     if(coin_state == LOW){
       coinCounter += 2; // one for rotate, one for stop
       Serial.print("coin count = ");
       Serial.println(coinCounter);
+      
+      lcd.setCursor(0,1);
+      lcd.print("insert coin : ");
+      lcd.print(coinCounter/2);
     }
     delay(50);
     last_coin_state = coin_state;
@@ -108,6 +116,10 @@ void loop() {
       coinCounter--;
       Serial.print("coin count = ");
       Serial.println(coinCounter);
+      lcd.setCursor(0,1);
+      lcd.print("insert coin : ");
+      lcd.print(coinCounter/2);
+      
       //servo_9.write(90);
       servo_3.write(90);
 
@@ -121,6 +133,10 @@ void loop() {
       coinCounter--;
       Serial.print("coin count = ");
       Serial.println(coinCounter);
+      lcd.setCursor(0,1);
+      lcd.print("insert coin : ");
+      lcd.print(coinCounter/2);
+      
       display_pin_values();
       oldPinValues = pinValues;
       if(coinCounter == 0){
@@ -130,7 +146,17 @@ void loop() {
     delay(POLL_DELAY_MSEC);
   }
 }
-
+void stopAllMotor(){
+  servo_3.write(90);
+  servo_6.write(90);
+  servo_9.write(90);
+  set_ch_pos_spd(1, 3850, 50);
+  set_ch_pos_spd(2, 3850, 50);
+  set_ch_pos_spd(4, 3850, 50);
+  set_ch_pos_spd(5, 3850, 50);
+  set_ch_pos_spd(7, 3850, 50);
+  set_ch_pos_spd(8, 3850, 50);
+}
 /*for button register*/
 BYTES_VAL_T read_shift_regs()
 {
@@ -236,7 +262,7 @@ void display_pin_values(){
 void on_off_motor(unsigned char channel, unsigned char on){
   unsigned char first_byte = 0;
   first_byte = 0b11000000|channel;
-  Serial.write(first_byte);   //Serial.write() 모두 주석처리 했으니 이상하면 풀어야 함
+  Serial.write(first_byte);
   Serial.write(on);
 }
 
