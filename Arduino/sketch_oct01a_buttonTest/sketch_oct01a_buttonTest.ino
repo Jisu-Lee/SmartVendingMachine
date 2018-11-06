@@ -1,3 +1,5 @@
+#include <Servo.h>
+
 #define NUMBER_OF_SHIFT_CHIPS   1     /* Width of data (how many ext lines).*/
 #define DATA_WIDTH   NUMBER_OF_SHIFT_CHIPS * 8  /* Width of pulse to trigger the shift register to read and latch.*/
 #define PULSE_WIDTH_USEC   5   /* Optional delay between shift register reads.*/
@@ -8,6 +10,11 @@ int ploadPin        = 8;  // Connects to Parallel load pin the 165
 int clockEnablePin  = 9;  // Connects to Clock Enable pin the 165
 int dataPin         = 11; // Connects to the Q7 pin the 165
 int clockPin        = 12; // Connects to the Clock pin the 165
+
+Servo servo3, servo6, servo9;
+int servo3_pin = 3;
+int servo6_pin = 4;
+int servo9_pin = 5;
 
 int btn9_pin = 13;
 int btn9_state = 0;
@@ -67,9 +74,17 @@ void display_pin_values()
 
         if((pinValues >> i) & 1)
             Serial.print("HIGH");
-        else
+        else{
+            if(i==7) servo3.write(0);
+            else if(i==1) servo6.write(0);
+            else if(i==5) servo9.write(0);
+            delay(1000);
+            
+            if(i==7) servo3.write(90);
+            else if(i==1) servo6.write(90);
+            else if(i==5) servo9.write(90);
             Serial.print("LOW");
-
+        }
         Serial.print("\r\n");
     }
 
@@ -91,6 +106,9 @@ void setup()
     digitalWrite(clockPin, LOW);
     digitalWrite(ploadPin, HIGH);
 
+    servo3.attach(servo3_pin);
+    servo6.attach(servo6_pin);
+    servo9.attach(servo9_pin);
     /* Read in and display the pin states at startup.
     */
     pinValues = read_shift_regs();

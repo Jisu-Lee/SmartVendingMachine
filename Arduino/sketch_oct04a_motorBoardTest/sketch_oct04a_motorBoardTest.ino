@@ -18,16 +18,18 @@ void loop() {
   btn1state = digitalRead(button);
 
   if(btn1state == LOW){
-    set_ch_pos_spd(1, 400, 50);
-    set_ch_pos_spd(3, 400, 50);
-    set_ch_pos_spd(5, 400, 50);
-    set_ch_pos_spd(7, 400, 50);
+    set_ch_pos_spd(2, 400, 50);
+    //set_ch_pos_spd(1, 400, 50);
+    //set_ch_pos_spd(3, 400, 50);
+    //set_ch_pos_spd(5, 400, 50);
+    //set_ch_pos_spd(7, 400, 50);
   } 
   else{ 
-    set_ch_pos_spd(1, 3850, 50);
-    set_ch_pos_spd(3, 3850, 50);
-    set_ch_pos_spd(5, 3850, 50);
-    set_ch_pos_spd(7, 3850, 50);
+    set_ch_pos_spd(2, 3850, 50);
+    //set_ch_pos_spd(1, 3850, 50);
+    //set_ch_pos_spd(3, 3850, 50);
+    //set_ch_pos_spd(5, 3850, 50);
+    //set_ch_pos_spd(7, 3850, 50);
   }
 }
 
