@@ -4,4 +4,5 @@
 # ignore all files in test/ directory
 test/
 env/
+__pycache__/
 
