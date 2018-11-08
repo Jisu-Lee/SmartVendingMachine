@@ -1,0 +1,7 @@
+# no backup file
+*.bak
+
+# ignore all files in test/ directory
+test/
+env/
+
