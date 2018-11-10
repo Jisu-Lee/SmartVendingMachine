@@ -1,4 +1,5 @@
 ﻿파일 경로에 한글이 반드시 없어야 함
+WARNING : 데이터베이스가 있는 버전은 로컬 테스팅이 안됨 ㅠ
 
 locally test server code :
 
