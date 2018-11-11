@@ -8,7 +8,7 @@ debug_mode = True
 load_existing_w_matrix = True
 
 if debug_mode == True:
-    DEFAULT_PARTICLE_PATH = 'w_matrix_debug.pkl'
+    DEFAULT_PARTICLE_PATH = 'w_matrix_movie_debug.pkl'
 else:
     DEFAULT_PARTICLE_PATH = 'w_matrix.pkl'
 
