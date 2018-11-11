@@ -25,11 +25,18 @@ def setNewProductFile():
 
 	for i, line in enumerate(pFile):
 		if(i == 0):
-			outputList = [line[0],line[2],line[3],"price","rating"]
+			outputList = [line[0],line[2],line[3],"skin_type","price","rating"]
 			oFile.writerow(outputList)
-			print(outputList)
 		else:
-			outputList = [line[0],line[2],line[3][1:-1],round(uniform(10,150),1),ratingList[i]]
+			rnum = round(uniform(0.5,3.5),0)
+			skin_type = ''
+			if(rnum == 1): 
+				skin_type = 'oily'
+			elif(rnum == 2):
+				skin_type = 'dry'
+			else:
+				skin_type = 'sensitive'
+			outputList = [line[0],line[2],line[3][1:-1],skin_type,round(uniform(10,150),1),ratingList[i]]
 			oFile.writerow(outputList)
 	
 	pinputFile.close()
