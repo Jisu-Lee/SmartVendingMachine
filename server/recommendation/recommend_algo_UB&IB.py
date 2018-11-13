@@ -4,24 +4,22 @@ import numpy as np
 import math
 from math import sqrt
 import pickle
-from dataSet_testRecommend import dataset
 
 debug_mode = True
-load_existing_w_matrix = False
+load_existing_w_matrix = True
 
 if debug_mode == True:
 	DEFAULT_PARTICLE_PATH = 'w_matrix_debug.pkl'
 else:
 	DEFAULT_PARTICLE_PATH = 'w_matrix.pkl'
 
-ratings = pd.read_csv("newratings.csv", encoding='"ISO-8859-1"')
+user_data = [] 		# user - id, skin_type
+cosmetic_data = [] 	# cosmetic - name, id, skin_type, product_type
+rating_data = [] 	# user_id, cosmetic_id, rating
 
-if debug_mode == True:
-	ratings = ratings[(ratings['Cos_id'] < 100) & (ratings['User_id'] < 100)]
-
-def define_dataset():
+def define_dataset(db_data):
 	dataset = {}
-	rinputFile = open('newratings.csv','r',encoding='"UTF-8')
+	rinputFile = open('newratings.csv','r')
 	rFile = csv.reader(rinputFile)
 
 	for i,line in enumerate(rFile):
@@ -36,7 +34,9 @@ def define_dataset():
 	rinputFile.close()
 	return dataset
 
-def pearson_correlation(person1,person2):
+#== user-based collaborative filtering for find similar user =========
+# find similarity in user with cosmetic rating
+def pearson_correlation(person1,person2, dataset):
 
 	# To get both rated items
 	both_rated = {}
@@ -70,10 +70,11 @@ def pearson_correlation(person1,person2):
 		r = numerator_value/denominator_value
 		return r 
 
-def most_similar_users(person,number_of_users):
+# use pearson_correlation for find n-most similar user
+def most_similar_users(person,number_of_users, dataset):
 	# returns the number_of_users (similar persons) for a given specific person.
 	person = str(person)
-	scores = [(pearson_correlation(person,other_person),other_person) for other_person in dataset if  other_person != person ]
+	scores = [(pearson_correlation(person,other_person, dataset),other_person) for other_person in dataset if  other_person != person ]
 	
 	# Sort the similar persons so that highest scores person will appear at the first
 	scores.sort()
@@ -84,16 +85,7 @@ def most_similar_users(person,number_of_users):
 		user_list.append(int(item[1]))
 	return user_list[0:number_of_users]
 
-ratings_training = ratings.sample(frac=0.7)
-ratings_test = ratings.drop(ratings_training.index)
-
-# calculate adjusted ratings based on training data
-rating_mean = ratings_training.groupby(['Cos_id'], as_index = False, sort = False).mean().rename(columns = {'rating': 'rating_mean'})[['Cos_id','rating_mean']]
-adjusted_ratings = pd.merge(ratings_training,rating_mean,on = 'Cos_id', how = 'left', sort = False)
-adjusted_ratings['rating_adjusted']=adjusted_ratings['rating']-adjusted_ratings['rating_mean']
-# replace 0 adjusted rating values to 1*e-8 in order to avoid 0 denominator
-adjusted_ratings.loc[adjusted_ratings['rating_adjusted'] == 0, 'rating_adjusted'] = 1e-8
-
+#== content-based collaborative filtering for recommend cosmetic =========
 # function of building the item-to-item weight matrix
 def build_w_matrix(adjusted_ratings, load_existing_w_matrix):
 	# define weight matrix
@@ -120,7 +112,6 @@ def build_w_matrix(adjusted_ratings, load_existing_w_matrix):
 			# extract all users who rated Cos_1
 			user_data = adjusted_ratings[adjusted_ratings['Cos_id'] == Cos_1]
 			distinct_users = np.unique(user_data['User_id'])
-			distinct_users = list(set(distinct_users).intersection(similar_user_list))
 			
 			# record the ratings for users who rated both Cos_1 and Cos_2
 			record_row_columns = ['User_id', 'Cos_1', 'Cos_2', 'rating_adjusted_1', 'rating_adjusted_2']
@@ -161,12 +152,6 @@ def build_w_matrix(adjusted_ratings, load_existing_w_matrix):
 		output.close()
 
 	return w_matrix
-
-dataset = define_dataset()
-similar_user_list = most_similar_users(2,20)
-
-# run the function to build similarity matrix
-w_matrix = build_w_matrix(adjusted_ratings, load_existing_w_matrix)
 
 # calculate the predicted ratings
 def predict(User_id, Cos_id, w_matrix, adjusted_ratings, rating_mean):
@@ -220,10 +205,6 @@ def binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean):
 	recall = tp/(tp+fn)
 	return (precision, recall)
 
-# run the evaluation
-eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
-print('Evaluation result - precision: %f, recall: %f' % eval_result)
-
 # make recommendations
 def recommend(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
 	distinct_cosmetics = np.unique(adjusted_ratings['Cos_id'])
@@ -246,8 +227,35 @@ def recommend(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
 	recommendations = user_ratings_all_cosmetics.sort_values(by=['rating'], ascending=False).head(amount)
 	return recommendations
 
-# get a recommendation list for a given user
 
+similar_user_list = most_similar_users(2,20, define_dataset(user_data))
+print(similar_user_list)
+
+ratings = pd.read_csv("newratings.csv", encoding='"UTF-8"')
+ratings = ratings[ratings['User_id'].isin(similar_user_list)]
+
+if debug_mode == True:
+	ratings = ratings[(ratings['Cos_id'] < 300)]
+print(ratings)
+
+ratings_training = ratings.sample(frac=0.7)
+ratings_test = ratings.drop(ratings_training.index)
+
+# calculate adjusted ratings based on training data
+rating_mean = ratings_training.groupby(['Cos_id'], as_index = False, sort = False).mean().rename(columns = {'rating': 'rating_mean'})[['Cos_id','rating_mean']]
+adjusted_ratings = pd.merge(ratings_training,rating_mean,on = 'Cos_id', how = 'left', sort = False)
+adjusted_ratings['rating_adjusted']=adjusted_ratings['rating']-adjusted_ratings['rating_mean']
+# replace 0 adjusted rating values to 1*e-8 in order to avoid 0 denominator
+adjusted_ratings.loc[adjusted_ratings['rating_adjusted'] == 0, 'rating_adjusted'] = 1e-8
+
+# run the function to build similarity matrix
+w_matrix = build_w_matrix(adjusted_ratings, load_existing_w_matrix)
+
+# run the evaluation
+eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
+print('Evaluation result - precision: %f, recall: %f' % eval_result)
+
+# get a recommendation list for a given user
 recommended_cosmetics = recommend(2, w_matrix, adjusted_ratings, rating_mean)
 print(recommended_cosmetics)
 
