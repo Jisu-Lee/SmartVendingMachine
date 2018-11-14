@@ -1,7 +1,7 @@
 # no backup file
 *.bak
 
-#
+# no pkl file
 *.pkl
 
 # ignore all files in test/ directory
