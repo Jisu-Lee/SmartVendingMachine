@@ -63,5 +63,29 @@ def setNewRatingFile():
 	inputFile.close()
 	outputFile.close()				
 
-setNewProductFile()
+def setNewUserFile():
+	rinputFile = open('newuser.csv','r',encoding='"UTF-8"')
+	rFile = csv.reader(rinputFile)
+	outputFile = open('newusers.csv','w',encoding='"UTF-8"',newline='')
+	oFile = csv.writer(outputFile)
+
+	for i, line in enumerate(rFile):
+		if(i == 0):
+			outputList = [line[0],line[1],line[2],"user_id","password","birthyear","gender"]
+			oFile.writerow(outputList)
+		else:
+			birth_year = round(uniform(1990,1999),0)
+			pw = round(uniform(1000,9999),0)
+			gnum = round(uniform(0,1),0)
+			gender = ''
+			if gnum == 0:
+				gender = 'male'
+			else:
+				gender = 'female'
+			outputList = [line[0],line[1],line[2],line[1],pw,birth_year,gender]
+			oFile.writerow(outputList)
+	rinputFile.close()
+	outputFile.close()
+
+setNewUserFile()
 
