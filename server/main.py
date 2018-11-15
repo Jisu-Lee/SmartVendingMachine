@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import logging
 import socket
 
-from flask import Flask, request
-from google.cloud import datastore
+from flask import Flask, request, render_template
+#from google.cloud import datastore
 
 
 app = Flask(__name__)
@@ -25,6 +24,8 @@ app = Flask(__name__)
 # [START main]
 @app.route('/')
 def main():
+    return render_template('list.html')
+    '''
     ds = datastore.Client()
 
     cos_name = 'Sidmool Cream'
@@ -50,7 +51,10 @@ def main():
 
     output = 'list of cosmetics:\n{}'.format('\n'.join(results))
 
-    return output, 200, {'Content-Type': 'text/plain; charset=utf-8'}    
+    return output, 200, {'Content-Type': 'text/plain; charset=utf-8'} 
+    '''
+
+
 
 @app.errorhandler(500)
 def server_error(e):
