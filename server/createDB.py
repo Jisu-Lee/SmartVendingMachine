@@ -3,7 +3,8 @@ from google.appengine.ext import ndb
 from google.appengine.api import users
 
 class User(ndb.Model):
-	id = ndb.FloatProperty()
+	id = ndb.IntegerProperty()
+	user_id = ndb.StringProperty()
 	pw = ndb.StringProperty()
 	name = ndb.StringProperty()
 	gender = ndb.StringProperty()
