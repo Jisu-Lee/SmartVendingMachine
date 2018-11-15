@@ -15,6 +15,8 @@
 import logging
 import socket
 
+import createDB
+
 from flask import Flask, request, render_template
 #from google.cloud import datastore
 
@@ -24,7 +26,27 @@ app = Flask(__name__)
 # [START main]
 @app.route('/')
 def main():
-    return render_template('about.html')
+    '''
+    data uploading example code
+    # first you should create entity object.
+    entity = User() //see createDB.py  
+    # data is your data to put into entity(여기서는 json형태 )
+    entity.id = # id data
+    entity.name = # name data
+    entity.gender = # gender data
+    entity.birthyear = # birthyear data
+    entity.skintype = # skintype data
+
+    logging.info(entity) # write log to keep if data is completely stored at entity
+    # put entity to server database
+    entity.put()
+        '''
+
+    return render_template('detail.html')
+
+@app.route('/favorite')
+def getFavorite():
+    return render_template('favorite.html')
     '''
     ds = datastore.Client()
 
