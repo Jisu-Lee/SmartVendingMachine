@@ -1,4 +1,4 @@
-
+<!-- No USE -->
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -71,7 +71,7 @@
 		<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
 		<aside id="fh5co-aside" role="complementary" class="border">
 
-			<h1 id="fh5co-logo"><a href="index.html"><img src="images/logo.png" alt="Free HTML5 Bootstrap Website Template"></a></h1>
+			<h1 id="fh5co-logo"><a href="index.html"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Free HTML5 Bootstrap Website Template"></a></h1>
 			<nav id="fh5co-main-menu" role="navigation">
 				<ul>
 					<li><a href="index.html">Home</a></li>
@@ -103,7 +103,7 @@
 						<p class="animate-box" data-animate-effect="fadeInLeft"> Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
 					</div>
 					<div class="col-md-6 col-md-push-1 animate-box" data-animate-effect="fadeInLeft">
-						<img src="images/img_1.jpg" alt="Free HTML5 Bootstrap Template" class="img-responsive"> 
+						<img src="{{ url_for('static', filename='images/img_1.jpg') }}" alt="Free HTML5 Bootstrap Template" class="img-responsive"> 
 					</div>
 				</div>
 				
@@ -114,7 +114,7 @@
 
 				<div class="row">
 					<div class="col-md-4 fh5co-staff">
-						<img src="images/person3.jpg" alt="Free HTML5 Bootstrap Template" class="img-responsive">
+						<img src="{{ url_for('static', filename='images/person3.jpg') }}" alt="Free HTML5 Bootstrap Template" class="img-responsive">
 						<h3>Athan Smith</h3>
 						<h4>Co-Founder, CEO</h4>
 						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
@@ -127,7 +127,7 @@
 						</ul>
 					</div>
 					<div class="col-md-4 fh5co-staff">
-						<img src="images/person2.jpg" alt="Free HTML5 Bootstrap Template" class="img-responsive">
+						<img src="{{ url_for('static', filename='images/person2.jpg') }}" alt="Free HTML5 Bootstrap Template" class="img-responsive">
 						<h3>Nathalie Kosley</h3>
 						<h4>Co-Founder, CTO</h4>
 						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
@@ -140,7 +140,7 @@
 						</ul>
 					</div>
 					<div class="col-md-4 fh5co-staff">
-						<img src="images/person4.jpg" alt="Free HTML5 Bootstrap Template" class="img-responsive">
+						<img src="{{ url_for('static', filename='images/person4.jpg') }}" alt="Free HTML5 Bootstrap Template" class="img-responsive">
 						<h3>Yanna Kuzuki</h3>
 						<h4>Co-Founder, Principal</h4>
 						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
@@ -155,7 +155,7 @@
 				</div>
 			</div>
 
-			<div class="fh5co-counters" style="background-image: url(images/hero.jpg);" data-stellar-background-ratio="0.5" id="counter-animate">
+			<div class="fh5co-counters" style="background-image: url({ url_for('static', filename='images/)}hero.jpg);" data-stellar-background-ratio="0.5" id="counter-animate">
 				<div class="fh5co-narrow-content animate-box">
 					<div class="row" >
 						<div class="col-md-4 text-center animate-box">

@@ -24,7 +24,7 @@ app = Flask(__name__)
 # [START main]
 @app.route('/')
 def main():
-    return render_template('list.html')
+    return render_template('about.html')
     '''
     ds = datastore.Client()
 
