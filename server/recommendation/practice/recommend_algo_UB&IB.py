@@ -13,27 +13,6 @@ if debug_mode == True:
 else:
 	DEFAULT_PARTICLE_PATH = 'w_matrix.pkl'
 
-user_data = [] 		# user - id, skin_type
-cosmetic_data = [] 	# cosmetic - name, id, skin_type, product_type
-rating_data = [] 	# user_id, cosmetic_id, rating
-
-def define_dataset(db_data):
-	dataset = {}
-	rinputFile = open('newratings.csv','r')
-	rFile = csv.reader(rinputFile)
-
-	for i,line in enumerate(rFile):
-		if(i is not 0):
-			if(line[0] not in dataset):
-				dataset[line[0]] = {line[1]:float(line[2])}
-			else:
-				dicItem = dict(dataset.get(line[0]))
-				dicItem[line[1]] = float(line[2])
-				dataset[line[0]] = dicItem
-
-	rinputFile.close()
-	return dataset
-
 #== user-based collaborative filtering for find similar user =========
 # find similarity in user with cosmetic rating
 def pearson_correlation(person1,person2, dataset):
@@ -205,8 +184,8 @@ def binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean):
 	recall = tp/(tp+fn)
 	return (precision, recall)
 
-# make recommendations
-def recommend(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
+# make recommendations with content-based
+def recommendCB(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
 	distinct_cosmetics = np.unique(adjusted_ratings['Cos_id'])
 	user_ratings_all_cosmetics = pd.DataFrame(columns=['Cos_id', 'rating'])
 	user_rating = adjusted_ratings[adjusted_ratings['User_id']==userID]
@@ -227,37 +206,78 @@ def recommend(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
 	recommendations = user_ratings_all_cosmetics.sort_values(by=['rating'], ascending=False).head(amount)
 	return recommendations
 
+def recommend_hybrid(userID, user_data, cosmetic_data, rating_data, product_data, skin_type):
+	
+	similar_user_list = most_similar_users(2,20, user_data)
+	print(similar_user_list)
+	
+	ratings = pd.read_csv("newratings.csv", encoding='"UTF-8"')
+	
+	if debug_mode == True:
+		ratings = ratings[(ratings['Cos_id'] < 300)]
+		print(ratings)
 
-similar_user_list = most_similar_users(2,20, define_dataset(user_data))
-print(similar_user_list)
+	ratings = ratings[ratings['User_id'].isin(similar_user_list)]
 
-ratings = pd.read_csv("newratings.csv", encoding='"UTF-8"')
-ratings = ratings[ratings['User_id'].isin(similar_user_list)]
+	ratings_training = ratings.sample(frac=0.7)
+	ratings_test = ratings.drop(ratings_training.index)
 
-if debug_mode == True:
-	ratings = ratings[(ratings['Cos_id'] < 300)]
-print(ratings)
+	# calculate adjusted ratings based on training data
+	rating_mean = ratings_training.groupby(['Cos_id'], as_index = False, sort = False).mean().rename(columns = {'rating': 'rating_mean'})[['Cos_id','rating_mean']]
+	adjusted_ratings = pd.merge(ratings_training,rating_mean,on = 'Cos_id', how = 'left', sort = False)
+	adjusted_ratings['rating_adjusted']=adjusted_ratings['rating']-adjusted_ratings['rating_mean']
+	# replace 0 adjusted rating values to 1*e-8 in order to avoid 0 denominator
+	adjusted_ratings.loc[adjusted_ratings['rating_adjusted'] == 0, 'rating_adjusted'] = 1e-8
 
-ratings_training = ratings.sample(frac=0.7)
-ratings_test = ratings.drop(ratings_training.index)
+	# run the function to build similarity matrix
+	w_matrix = build_w_matrix(adjusted_ratings, load_existing_w_matrix)
 
-# calculate adjusted ratings based on training data
-rating_mean = ratings_training.groupby(['Cos_id'], as_index = False, sort = False).mean().rename(columns = {'rating': 'rating_mean'})[['Cos_id','rating_mean']]
-adjusted_ratings = pd.merge(ratings_training,rating_mean,on = 'Cos_id', how = 'left', sort = False)
-adjusted_ratings['rating_adjusted']=adjusted_ratings['rating']-adjusted_ratings['rating_mean']
-# replace 0 adjusted rating values to 1*e-8 in order to avoid 0 denominator
-adjusted_ratings.loc[adjusted_ratings['rating_adjusted'] == 0, 'rating_adjusted'] = 1e-8
+	# run the evaluation
+	eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
+	print('Evaluation result - precision: %f, recall: %f' % eval_result)
 
-# run the function to build similarity matrix
-w_matrix = build_w_matrix(adjusted_ratings, load_existing_w_matrix)
+	# get a recommendation list for a given user
+	recommended_cosmetics = recommendCB(2, w_matrix, adjusted_ratings, rating_mean)
+	return recommended_cosmetics
 
-# run the evaluation
-eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
-print('Evaluation result - precision: %f, recall: %f' % eval_result)
 
-# get a recommendation list for a given user
-recommended_cosmetics = recommend(2, w_matrix, adjusted_ratings, rating_mean)
-print(recommended_cosmetics)
+user_uid = [1,2,3,4,5,6,7,8,9,10]		# user - id
+
+cosmetic_name = ['a','b','c','d','e','f'] 	# cosmetic - name
+cosmetic_cid = [1,2,3,4,5,6] 				# cosmetic - id
+cosmetic_ptype = 'Oily' 					# cosmetic - product_type
+
+rating_uid = 	[1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15] 	# rating - user_id
+rating_cid = 	[1,2,3,1,2,3,8,4,1,5,2,5,3,6,5,1,3,2,8,2,2,1,3,1,9,7,5,8,3,9,5,8] 				# rating - cosmetic_id
+rating_score = 	[1.1,1.9,1.3,1.5,1.8,1.2,2.2,2.3,2.1,2.8,3.0,3.2,3.4,3.5,1.1,3.6,
+				 3.1,4.1,4.7,4.6,4.3,5.0,3.1,4.6,0.5,5.0,1.1,1.2,1.3,1.4,1.5,2.2] 				# rating - score
+
+
+def define_dataset(db_data):
+	dataset = {}
+	rinputFile = open('newratings.csv','r')
+	rFile = csv.reader(rinputFile)
+
+	for i,line in enumerate(rFile):
+		if(i is not 0):
+			if(line[0] not in dataset):
+				dataset[line[0]] = {line[1]:float(line[2])}
+			else:
+				dicItem = dict(dataset.get(line[0]))
+				dicItem[line[1]] = float(line[2])
+				dataset[line[0]] = dicItem
+
+	rinputFile.close()
+	return dataset
+
+
+skin_type_oily = 'oily'
+skin_type_sensitive = 'sensitive'
+skin_type_dry = 'dry'
+
+#print(recommend_hybrid(2, user_data, cosmetic_data, rating_data, 'cream',skin_type_dry))
+
+
 
 
 

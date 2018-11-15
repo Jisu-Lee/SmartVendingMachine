@@ -15,7 +15,7 @@ else:
 ratings = pd.read_csv("datasets/ratings.csv", encoding='"ISO-8859-1"')
 
 if debug_mode == True:
-    ratings = ratings[(ratings['movieId'] < 100) & (ratings['userId'] < 100)]
+    ratings = ratings[(ratings['movieId'] < 50) & (ratings['userId'] < 100)]
 
 ratings_training = ratings.sample(frac=0.7)
 ratings_test = ratings.drop(ratings_training.index)
@@ -163,11 +163,15 @@ def recommend(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
     user_ratings_all_movies = pd.DataFrame(columns=['movieId', 'rating'])
     user_rating = adjusted_ratings[adjusted_ratings['userId']==userID]
 
+    print(user_rating[user_rating['movieId']==39])
     # calculate the ratings for all movies that the user hasn't rated
     i = 0
     for movie in distinct_movies:
         user_rating = user_rating[user_rating['movieId']==movie]
+        if movie == 39:
+            print('***',movie,' : ', user_rating[user_rating['movieId']==movie])
         if user_rating.shape[0] > 0:
+            print('***', user_rating)
             rating_value = user_ratings_all_movies.loc[i, 'rating'] = user_rating.loc[0, movie]
         else:
             rating_value = user_ratings_all_movies.loc[i, 'rating'] = predict(userID, movie, w_matrix, adjusted_ratings, rating_mean)

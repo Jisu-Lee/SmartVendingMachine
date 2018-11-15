@@ -1,8 +1,8 @@
-# no backup file
+# ignore file
 *.bak
-
-# no pkl file
 *.pkl
+
+w_matrix_debug.pkl
 
 # ignore all files in test/ directory
 test/
