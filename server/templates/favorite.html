@@ -7,7 +7,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Cart</title>
+	<title>Nitro &mdash; Free HTML5 Bootstrap Website Template by FreeHTML5.co</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Website Template by FreeHTML5.co" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -45,60 +45,23 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-
-			<!-- jQuery -->
-			<script src="js/jquery.min.js"></script>
-			<!-- jQuery Easing -->
-			<script src="js/jquery.easing.1.3.js"></script>
-			<!-- Bootstrap -->
-			<script src="js/bootstrap.min.js"></script>
-			<!-- Carousel -->
-			<script src="js/owl.carousel.min.js"></script>
-			<!-- Stellar -->
-			<script src="js/jquery.stellar.min.js"></script>
-			<!-- Waypoints -->
-			<script src="js/jquery.waypoints.min.js"></script>
-			<!-- Counters -->
-			<script src="js/jquery.countTo.js"></script>
-			<!-- Common --> <!-- 내가 넣은 거 -- >
-
-			<!-- Latest compiled and minified CSS -->
-			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-			<!-- Optional theme -->
-			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-			<!-- Latest compiled and minified JavaScript -->
-			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-			<!-- Add icon library -->
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-			<!-- Compiled and minified CSS -->
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-			<!-- Compiled and minified JavaScript -->
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-			<!-- MAIN JS -->
-			<script src="js/main.js"></script>
-
-			<script type="text/javascript" src="js/cart.js"></script>
-
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<!-- Animate.css -->
-	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
 	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="css/icomoon.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/icomoon.css') }}">
 	<!-- Bootstrap  -->
-	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
 	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
 	<!-- Theme style  -->
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
+	<script src="{{ url_for('static', filename='js/modernizr-2.6.2.min.js') }}"></script>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -110,21 +73,21 @@
 		<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
 		<aside id="fh5co-aside" role="complementary" class="border js-fullheight">
 
-			<h1 id="fh5co-logo"><a href="index.html"><img src="images/logo.png" alt="Free HTML5 Bootstrap Website Template"></a></h1>
+			<h1 id="fh5co-logo"><a href="index.html"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Free HTML5 Bootstrap Website Template"></a></h1>
 
-		<div >
-
-			<h3 id="fh5co-logo">Welcome, costomer 1!</h3>
-		</div>
+<!-- 여기에 기존 코드 -->
 			<nav id="fh5co-main-menu" role="navigation">
 				<ul>
-					<li><a href="buy.html">Buy</a></li>
-					<li class="fh5co-active"><a href="cart.html">Cart</a></li>
+					<li><a href="list.html">List</a></li>
+					<li class="fh5co-active"><a href="favorite.html">Favorite</a></li>
 					<li><a href="recommand.html">Recommand</a></li>
 					<li><a href="map.html">Nearest Vending Machine</a></li>
 					<li><a href="userdata.html">User Data</a></li>
 				</ul>
 			</nav>
+
+
+
 
 			<div class="fh5co-footer">
 				<p><small>&copy; 2016 Nitro Free HTML5. All Rights Reserved.</span> <span>Designed by <a href="http://freehtml5.co/" target="_blank">FreeHTML5.co</a> </span> <span>Demo Images: <a href="http://unsplash.com/" target="_blank">Unsplash</a></span></small></p>
@@ -141,45 +104,36 @@
 		<div id="fh5co-main">
 
 			<div class="fh5co-narrow-content">
-				<h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">Favorite </h2>
+				<h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">Favorite <span></span></h2>
 				<div class="row animate-box" data-animate-effect="fadeInLeft">
-					<div class="data">
 
 
 
-						<div class="panel panel-default">
-						  <!-- Default panel contents -->
+					<ul class="nav nav-tabs">
+					  <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+					  <li><a data-toggle="tab" href="#skin">Skin</a></li>
+					  <li><a data-toggle="tab" href="#lotion">Lotion</a></li>
+					  <li><a data-toggle="tab" href="#sunblock">Sunblock</a></li>
+					</ul>
 
+					<div class="tab-content">
+					  <div id="home" class="tab-pane fade in active">
 
-							<!-- Tabs -->
-								<div class="row">
-									<div class="col s12">
-										<ul class="tabs">
-											<li class="tab col s3"><a class="active" href="#test1">Test 1</a></li>
-											<li class="tab col s3"><a href="#test2">Test 2</a></li>
-											<li class="tab col s3"><a href="#test3">Test 3</a></li>
-										</ul>
-									</div>
-									<div id="test1" class="col s12"></div>
-									<div id="test2" class="col s12"></div>
-									<div id="test3" class="col s12"></div>
+					  </div>
+					  <div id="skin" class="tab-pane fade">
 
-								</div>
+					  </div>
+					  <div id="lotion" class="tab-pane fade">
 
+					  </div>
+						<div id="sunblock" class="tab-pane fade">
 
 						</div>
-
-
-
-
 					</div>
 
 
 
-
-
 					<div class="clearfix visible-md-block"></div>
-
 
 
 
@@ -196,8 +150,28 @@
 	</div>
 
 
+	<!-- jQuery -->
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<!-- jQuery Easing -->
+	<script src="{{ url_for('static', filename='js/jquery.easing.1.3.js') }}"></script>
+	<!-- Bootstrap -->
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<!-- Carousel -->
+	<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+	<!-- Stellar -->
+	<script src="{{ url_for('static', filename='js/jquery.stellar.min.js') }}"></script>
+	<!-- Waypoints -->
+	<script src="{{ url_for('static', filename='js/jquery.waypoints.min.js') }}"></script>
+	<!-- Counters -->
+	<script src="{{ url_for('static', filename='js/jquery.countTo.js') }}"></script>
+	<!-- Common --> <!-- 내가 넣은 거 -- >
+
+	<!-- MAIN JS -->
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+	<script type="text/javascript" src="{{ url_for('static', filename='js/favorite.js') }}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
-<script>
 	</body>
 </html>

@@ -45,19 +45,19 @@
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
 	<!-- Animate.css -->
-	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
 	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="css/icomoon.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/icomoon.css') }}">
 	<!-- Bootstrap  -->
-	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
 	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
 	<!-- Theme style  -->
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
+	<script src="{{ url_for('static', filename='js/modernizr-2.6.2.min.js') }}"></script>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -67,20 +67,20 @@
 	<body>
 
 	<div id="fh5co-page">
+		<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle dark"><i></i></a>
+		<aside id="fh5co-aside" role="complementary" class="js-fullheight">
 
-		<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
-		<aside id="fh5co-aside" role="complementary" class="border">
-
-			<h1 id="fh5co-logo"><a href="index.html"><img src="images/logo.png" alt="Free HTML5 Bootstrap Website Template"></a></h1>
-			<nav id="fh5co-main-menu" role="navigation">
-				<ul>
-					<li><a href="buy.html">Buy</a></li>
-					<li><a href="cart.html">Cart</a></li>
-					<li><a href="recommand.html">Recommand</a></li>
-					<li><a href="map.html">Nearest Vending Machine</a></li>
-					<li class="fh5co-active"><a href="userdata.html">User Data</a></li>
-				</ul>
-			</nav>
+			<h1 id="fh5co-logo"><a href="index.html"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Free HTML5 Bootstrap Website Template"></a></h1>
+			<!-- 여기에 기존 코드 -->
+						<nav id="fh5co-main-menu" role="navigation">
+							<ul>
+								<li><a href="list.html">List</a></li>
+								<li><a href="favorite.html">Favorite</a></li>
+								<li><a href="recommand.html">Recommand</a></li>
+								<li class="fh5co-active"><a href="map.html">Nearest Vending Machine</a></li>
+								<li><a href="userdata.html">User Data</a></li>
+							</ul>
+						</nav>
 
 			<div class="fh5co-footer">
 				<p><small>&copy; 2016 Nitro Free HTML5. All Rights Reserved.</span> <span>Designed by <a href="http://freehtml5.co/" target="_blank">FreeHTML5.co</a> </span> <span>Demo Images: <a href="http://unsplash.com/" target="_blank">Unsplash</a></span></small></p>
@@ -96,48 +96,8 @@
 
 		<div id="fh5co-main">
 
-
-			<div class="fh5co-narrow-content animate-box" data-animate-effect="fadeInLeft">
-
-				<div class="row">
-					<div class="col-md-4">
-						<h1>User data</h1>
-					</div>
-				</div>
-				<form action="">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Name">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Age">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Skin Type">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Gender">
-									</div>
-									<div class="form-group">
-										<textarea name="" id="message" cols="30" rows="7" class="form-control" placeholder="Memo"></textarea>
-									</div>
-									<div class="form-group">
-										<input type="submit" class="btn btn-primary btn-md" value="Confirm">
-									</div>
-								</div>
-								<div class="col-md-6">
-
-								</div>
-
-							</div>
-						</div>
-
-					</div>
-				</form>
-			</div>
+			<div id="map"></div>
+			<div id="data"></div>
 
 
 
@@ -145,23 +105,29 @@
 	</div>
 
 	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 	<!-- jQuery Easing -->
-	<script src="js/jquery.easing.1.3.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.easing.1.3.js') }}"></script>
 	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 	<!-- Carousel -->
-	<script src="js/owl.carousel.min.js"></script>
+	<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
 	<!-- Stellar -->
-	<script src="js/jquery.stellar.min.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.stellar.min.js') }}"></script>
 	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.waypoints.min.js') }}"></script>
 	<!-- Counters -->
-	<script src="js/jquery.countTo.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.countTo.js') }}"></script>
+	<!-- Common --> <!-- 내가 넣은 거 -- >
+
+	<!-- Google Map -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxXwQulPQ-OzYdmN_FWwUllzjHoG45w1Y&sensor=false"></script>
+	<script src="{{ url_for('static', filename='js/google_map.js') }}"></script>
+
 
 
 	<!-- MAIN JS -->
-	<script src="js/main.js"></script>
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 	</body>
 </html>

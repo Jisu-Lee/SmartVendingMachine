@@ -12,19 +12,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_quickstart]
 import logging
+import socket
 
-from flask import Flask
+from flask import Flask, request, render_template
+#from google.cloud import datastore
 
 
 app = Flask(__name__)
 
-
+# [START main]
 @app.route('/')
-def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello World! - woojin'
+def main():
+    return render_template('about.html')
+    '''
+    ds = datastore.Client()
+
+    cos_name = 'Sidmool Cream'
+    cos_skintype = 'dry'
+    cos_price = 200
+    cos_rating = 4.5
+
+    entity = datastore.Entity(key=ds.key('cosmetics'))
+    entity.update({
+        'name': cos_name,
+        'skintype': cos_skintype,
+        'price': cos_price,
+        'rating': cos_rating
+    })
+
+    ds.put(entity)
+
+    query = ds.query(kind='cosmetics', order=('-name',))
+
+    results = [
+        'name: {name} price: {price} rating: {rating}'.format(**x)
+        for x in query.fetch(limit=10)]
+
+    output = 'list of cosmetics:\n{}'.format('\n'.join(results))
+
+    return output, 200, {'Content-Type': 'text/plain; charset=utf-8'} 
+    '''
+
 
 
 @app.errorhandler(500)
@@ -40,4 +69,3 @@ if __name__ == '__main__':
     # This is used when running locally. Gunicorn is used to run the
     # application on Google App Engine. See entrypoint in app.yaml.
     app.run(host='127.0.0.1', port=8080, debug=True)
-# [END gae_flex_quickstart]
