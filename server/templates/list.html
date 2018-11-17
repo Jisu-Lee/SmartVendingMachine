@@ -78,11 +78,11 @@
 <!-- 여기에 기존 코드 -->
 			<nav id="fh5co-main-menu" role="navigation">
 				<ul>
-					<li class="fh5co-active"><a href="list.html">List</a></li>
-					<li><a href="favorite.html">Favorite</a></li>
-					<li><a href="recommand.html">Recommand</a></li>
-					<li><a href="map.html">Nearest Vending Machine</a></li>
-					<li><a href="userdata.html">User Data</a></li>
+					<li class="fh5co-active"><a href="{{ url_for('static', filename='list.html') }}">List</a></li>
+					<li><a href="{{ url_for('static', filename='favorite.html') }}">Favorite</a></li>
+					<li><a href="{{ url_for('static', filename='recommand.html') }}">Recommand</a></li>
+					<li><a href="{{ url_for('static', filename='map.html') }}">Nearest Vending Machine</a></li>
+					<li><a href="{{ url_for('static', filename='userdata.html') }}">User Data</a></li>
 				</ul>
 			</nav>
 
