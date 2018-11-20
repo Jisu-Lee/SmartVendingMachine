@@ -1,6 +1,6 @@
 import csv
 from random import uniform
-
+from random import randint
 def setNewProductFile():
 	pinputFile = open('products.csv','r',encoding='"UTF-8"')
 	pFile = csv.reader(pinputFile)
@@ -87,5 +87,24 @@ def setNewUserFile():
 	rinputFile.close()
 	outputFile.close()
 
-setNewUserFile()
+def setNewStockFile():
+	outputFile = open('newstock.csv','w',encoding='"UTF-8"',newline='')
+	oFile = csv.writer(outputFile)
+	for i in range(11):
+		if i == 0:
+			outputFileList = ['vending_id','cosmetic_id','stock']
+			oFile.writerow(outputFileList)
+		else:
+			stock = {}
+			for j in range(30):
+				rnum = randint(1,120)
+				if rnum not in stock:
+					snum = round(uniform(0,15),0)
+					stock[rnum] = snum
+					oFile.writerow([i,rnum,snum])
+				else:
+					j = j - 1
+	outputFile.close()
+					
+setNewStockFile()
 
