@@ -45,10 +45,8 @@ def main():
     #fav_list = [{"id": "110", "name": "eye paint eye shadow", "price": "76.2", "product_type": "sunscreen", "rating": "4.9", "skintype": "dry"}, {"id": "100", "name": "sparkle eye shadow", "price": "111", "product_type": "sunscreen", "rating": "2.4", "skintype": "oily"}, {"id": "102", "name": "treatment lip shine", "price": "18.2", "product_type": "sunscreen", "rating": "2", "skintype": "dry"}, {"id": "103", "name": "tweezer", "price": "54.5", "product_type": "sunscreen", "rating": "2.8", "skintype": "oily"}, {"id": "26", "name": "buffing grains for face", "price": "24.2", "product_type": "cream", "rating": "2.9", "skintype": "oily"}, {"id": "119", "name": "amc bronzing powder", "price": "23.2", "product_type": "sunscreen", "rating": "2.4", "skintype": "sensitive"}, {"id": "98", "name": "shimmer wash eye shadow", "price": "20.3", "product_type": "sunscreen", "rating": "2.1", "skintype": "sensitive"}, {"id": "120", "name": "amc multicolour system bronzing powder", "price": "149.6", "product_type": "sunscreen", "rating": "2.6", "skintype": "dry"}, {"id": "105", "name": "vitamin enriched face base", "price": "121.6", "product_type": "sunscreen", "rating": "2.2", "skintype": "sensitive"}, {"id": "80", "name": "natural brow shaper \u0026 hair touch up", "price": "127.1", "product_type": "mositurizer", "rating": "1.6", "skintype": "dry"}]
 
 
-    return render_template('favorite.html', fav_list=fav_list)
+    return render_template('list.html')
 
-
-app = Flask(__name__)
 
 # local debugging    
 @app.route('/recommand')
