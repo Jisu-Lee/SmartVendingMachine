@@ -165,7 +165,7 @@ if __name__ == '__main__':
     '''
 
     '''
-    # reading csv
+    # reading cosmetic csv
     cinputFile = open('newproducts.csv','r',encoding='"UTF-8"')
     cFile = csv.reader(cinputFile)
     for i,line in enumerate(cFile):
@@ -182,6 +182,8 @@ if __name__ == '__main__':
             })
             ds.put(entity)
     cinputFile.close()
+
+    # reading rating csv
     rinputFile = open('newratings.csv','r',encoding='"UTF-8"')
     rFile = csv.reader(rinputFile)
     for i,line in enumerate(rFile):
@@ -191,8 +193,39 @@ if __name__ == '__main__':
             entity.update({
                 'user_id' : line[0],
                 'cosmetic_id': line[1],
-                'rating': line[2],
+                'rating': line[2]
             })
             ds.put(entity)
     rinputFile.close()
+
+    # reading ve csv
+    sinputFile = open('newstock.csv','r',encoding='"UTF-8"')
+    sFile = csv.reader(sinputFile)
+    for i,line in enumerate(sFile):
+        if( i is not 0):
+            ds = datastore.Client()
+            entity = datastore.Entity(key=ds.key('stock'))
+            entity.update({
+                'cos_name' : line[1],
+                'ven_id': line[0],
+                'rating': line[2]
+            })
+            ds.put(entity)
+    sinputFile.close()
+    
+    # reading vending csv
+    vinputFile = open('newvending.csv','r',encoding='"UTF-8"')
+    vFile = csv.reader(vinputFile)
+    for i,line in enumerate(vFile):
+        if( i is not 0):
+            ds = datastore.Client()
+            entity = datastore.Entity(key=ds.key('vending'))
+            entity.update({
+                'id' : line[0],
+                'kyungdo': line[1],
+                'wedo': line[2],
+                'name': line[3]
+            })
+            ds.put(entity)
+    vinputFile.close()
     '''
