@@ -229,3 +229,25 @@ def change_id_to_name(cosmetic_name, cosmetic_cid, recommended_item):
     for cos_id in recommended_cid:
         recommended_name.append(cosmetic_name[cosmetic_cid.index(cos_id)])
     return recommended_name
+
+def define_lisset(similarCos, similarUser, allRating):
+	uid_list = []
+	cid_list = []
+	rating_uid_list = []
+	rating_cid_list = []
+	rating_score_list = []
+
+	k = 0
+	for i in range(len(similarUser)):
+		uid_list.append(similarUser[i]["id"])
+	
+	for i in range(len(similarCos)):
+		cid_list.append(similarCos[i]["id"])
+
+	for i in range(len(allRating)):
+		rating_uid_list.append(allRating[i]["user_id"])
+		rating_cid_list.append(allRating[i]["cosmetic_id"])
+		rating_score_list.append(allRating[i]["rating"])
+
+	dataset = {'uid_list' : uid_list, 'cid_list' : cid_list, "rating_uid_list" : rating_uid_list, "rating_cid_list" : rating_cid_list, "rating_score_list" : rating_score_list}
+	return dataset
