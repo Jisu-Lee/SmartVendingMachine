@@ -76,15 +76,15 @@
 			<h1 id="fh5co-logo"><a href="index.html"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Free HTML5 Bootstrap Website Template"></a></h1>
 
 <!-- 여기에 기존 코드 -->
-			<nav id="fh5co-main-menu" role="navigation">
-				<ul>
-					<li><a href="list.html">List</a></li>
-					<li class="fh5co-active"><a href="favorite.html">Favorite</a></li>
-					<li><a href="recommand.html">Recommand</a></li>
-					<li><a href="map.html">Nearest Vending Machine</a></li>
-					<li><a href="userdata.html">User Data</a></li>
-				</ul>
-			</nav>
+<nav id="fh5co-main-menu" role="navigation">
+	<ul>
+		<li><a href="{{ url_for('static', filename='list.html') }}">List</a></li>
+		<li class="fh5co-active"><a href="{{ url_for('static', filename='favorite.html') }}">Favorite</a></li>
+		<li><a href="{{ url_for('static', filename='recommand.html') }}">Recommand</a></li>
+		<li><a href="{{ url_for('static', filename='map.html') }}">Nearest Vending Machine</a></li>
+		<li><a href="{{ url_for('static', filename='userdata.html') }}">User Data</a></li>
+	</ul>
+</nav>
 
 
 

@@ -7,8 +7,6 @@ import pickle
 
 DEFAULT_PARTICLE_PATH = 'w_matrix.pkl'
 
-# select sensitive skin users and cosmetics
-
 def define_dataset(user_uid, cosmetic_cid, rating_uid, rating_cid, rating_score):
 	ub_dataset = {}
 	uid_list = []
@@ -203,10 +201,10 @@ def recommendCB(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
 
 def recommend_hybrid(user_id, similar_user_num, content_num, dataset):
 	similar_user = most_similar_users(user_id, similar_user_num, dataset['ub_dataset'])
-	
+	print('\nmost similar user : ', similar_user)
 	cb_dataset = dataset['cb_dataset']
 	cb_dataset = cb_dataset[cb_dataset['User_id'].isin(similar_user)]
-	ratings_training = cb_dataset.sample(frac=0.7)
+	ratings_training = cb_dataset.sample(frac=1.0)
 	ratings_test = cb_dataset.drop(ratings_training.index)
 	
 	# calculate adjusted ratings based on training data
@@ -220,8 +218,8 @@ def recommend_hybrid(user_id, similar_user_num, content_num, dataset):
 	w_matrix = build_w_matrix(adjusted_ratings)
 
 	# run the evaluation
-	eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
-	print('Evaluation result - precision: %f, recall: %f' % eval_result)
+	#eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
+	#print('Evaluation result - precision: %f, recall: %f' % eval_result)
 
 	# get a recommendation list for a given user
 	recommended_cosmetics = recommendCB(2, w_matrix, adjusted_ratings, rating_mean)
@@ -236,27 +234,22 @@ def change_id_to_name(cosmetic_name, cosmetic_cid, recommended_item):
 	return recommended_name
 
 user_id = 1
-similar_user_num = 5
+similar_user_num = 4
 content_num = 3
-user_uid = [1,2,3,4,5,6,7,8,9,10]		# user - id
+user_uid = [1,2,3,4,5,6,7,8,9]		# user - id
 
-cosmetic_name = ['a','b','c','d','e','f'] 	# cosmetic - name
-cosmetic_cid = [1,2,3,4,5,6] 				# cosmetic - id
-cosmetic_ptype = 'Oily' 					# cosmetic - product_type
+cosmetic_name = ['a','b','c','d','e','f','g','h'] 	# cosmetic - name
+cosmetic_cid = 	[1,2,3,4,5,6,7,8]	 				# cosmetic - id
 
-rating_uid = 	[1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15] 	# rating - user_id
-rating_cid = 	[1,2,3,1,2,3,8,4,1,5,2,5,3,6,5,1,3,2,8,2,2,1,3,1,9,7,5,8,3,9,5,8] 				# rating - cosmetic_id
-rating_score = 	[1.1,1.9,1.3,1.5,1.8,1.2,2.2,2.3,2.1,2.8,3.0,3.2,3.4,3.5,1.1,3.6,
-				 3.1,4.1,4.7,4.6,4.3,5.0,3.1,4.6,0.5,5.0,1.1,1.2,1.3,1.4,1.5,2.2] 				# rating - score
+rating_uid = 	[1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9] 	# rating - user_id
+rating_cid = 	[1,2,3,1,2,3,4,5,1,2,4,5,6,1,5,6,2,5,8,2,6,8,1,5,8,2,4,5,1,4,7] 	# rating - cosmetic_id
+rating_score = 	[2.1,1.9,3.5,2.0,1.8,2.0,3.2,3.3,2.2,2.0,3.7,3.2,3.4,3.5,1.1,3.6,
+				 3.1,4.1,4.7,4.6,4.3,5.0,3.1,4.6,0.5,5.0,1.1,1.2,1.3,1.4,1.5] 	# rating - score
 
 dataset = define_dataset(user_uid, cosmetic_cid, rating_uid, rating_cid, rating_score)
 
-while True:
-	try:
-		recommended_id = recommend_hybrid(user_id,similar_user_num,content_num,dataset)
-		break
-	except ZeroDivisionError:
-		print("Oops!  That was no valid number.  Try again...")
+recommended_id = recommend_hybrid(user_id,similar_user_num,content_num,dataset)
+print('\n', recommended_id)
 
 recommended_name = change_id_to_name(cosmetic_name, cosmetic_cid, recommended_id)
-print(recommended_name)
+print('\nrecommend item : ', recommended_name)

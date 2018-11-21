@@ -26,7 +26,7 @@ from math import sqrt
 import pickle
 
 from flask import Flask, request, render_template
-'''
+
 from google.cloud import datastore
 
 
@@ -44,9 +44,10 @@ def main():
 
     #fav_list = [{"id": "110", "name": "eye paint eye shadow", "price": "76.2", "product_type": "sunscreen", "rating": "4.9", "skintype": "dry"}, {"id": "100", "name": "sparkle eye shadow", "price": "111", "product_type": "sunscreen", "rating": "2.4", "skintype": "oily"}, {"id": "102", "name": "treatment lip shine", "price": "18.2", "product_type": "sunscreen", "rating": "2", "skintype": "dry"}, {"id": "103", "name": "tweezer", "price": "54.5", "product_type": "sunscreen", "rating": "2.8", "skintype": "oily"}, {"id": "26", "name": "buffing grains for face", "price": "24.2", "product_type": "cream", "rating": "2.9", "skintype": "oily"}, {"id": "119", "name": "amc bronzing powder", "price": "23.2", "product_type": "sunscreen", "rating": "2.4", "skintype": "sensitive"}, {"id": "98", "name": "shimmer wash eye shadow", "price": "20.3", "product_type": "sunscreen", "rating": "2.1", "skintype": "sensitive"}, {"id": "120", "name": "amc multicolour system bronzing powder", "price": "149.6", "product_type": "sunscreen", "rating": "2.6", "skintype": "dry"}, {"id": "105", "name": "vitamin enriched face base", "price": "121.6", "product_type": "sunscreen", "rating": "2.2", "skintype": "sensitive"}, {"id": "80", "name": "natural brow shaper \u0026 hair touch up", "price": "127.1", "product_type": "mositurizer", "rating": "1.6", "skintype": "dry"}]
 
+
     return render_template('favorite.html', fav_list=fav_list)
 
-'''
+
 app = Flask(__name__)
 
 # local debugging    
@@ -117,6 +118,7 @@ def test():
 @app.route('/favorite')
 
 def getFavorite():
+
     return render_template('favorite.html')
 '''
 @app.route('/detail')
@@ -139,30 +141,61 @@ if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
 
     '''
-    ds = datastore.Client()
+	cos_name = 'Sidmool Cream'
+	cos_skintype = 'dry'
+	cos_price = 200
+	cos_rating = 4.5
 
-    cos_name = 'Sidmool Cream'
-    cos_skintype = 'dry'
-    cos_price = 200
-    cos_rating = 4.5
+	entity = datastore.Entity(key=ds.key('cosmetics'))
+	entity.update({
+		'name': cos_name,
+		'skintype': cos_skintype,
+		'price': cos_price,
+		'rating': cos_rating
+	})
 
-    entity = datastore.Entity(key=ds.key('cosmetics'))
-    entity.update({
-        'name': cos_name,
-        'skintype': cos_skintype,
-        'price': cos_price,
-        'rating': cos_rating
-    })
+	ds.put(entity)
 
-    ds.put(entity)
+	query = ds.query(kind='cosmetics', order=('-name',))
 
-    query = ds.query(kind='cosmetics', order=('-name',))
+	results = [
+		'name: {name} price: {price} rating: {rating}'.format(**x)
+		for x in query.fetch(limit=10)]
 
-    results = [
-        'name: {name} price: {price} rating: {rating}'.format(**x)
-        for x in query.fetch(limit=10)]
-
-    output = 'list of cosmetics:\n{}'.format('\n'.join(results))
+	output = 'list of cosmetics:\n{}'.format('\n'.join(results))
 
     return output, 200, {'Content-Type': 'text/plain; charset=utf-8'} 
+    '''
+
+    '''
+    # reading csv
+    cinputFile = open('newproducts.csv','r',encoding='"UTF-8"')
+    cFile = csv.reader(cinputFile)
+    for i,line in enumerate(cFile):
+        if( i is not 0):
+            ds = datastore.Client()
+            entity = datastore.Entity(key=ds.key('cosmetics'))
+            entity.update({
+                'id' : line[0],
+                'name': line[1],
+                'skintype': line[3],
+                'product_type' : line[2],
+                'price' : line[4],
+                'rating' : line[5]
+            })
+            ds.put(entity)
+    cinputFile.close()
+    rinputFile = open('newratings.csv','r',encoding='"UTF-8"')
+    rFile = csv.reader(rinputFile)
+    for i,line in enumerate(rFile):
+        if( i is not 0):
+            ds = datastore.Client()
+            entity = datastore.Entity(key=ds.key('favorite'))
+            entity.update({
+                'user_id' : line[0],
+                'cosmetic_id': line[1],
+                'rating': line[2],
+            })
+            ds.put(entity)
+    rinputFile.close()
     '''
