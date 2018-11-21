@@ -1,22 +1,24 @@
 
-function addDynamicCosmetic(j, i){
+function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
 
-  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a href="work.html"><h4>'+j+'</h4><img src="images/work_2.jpg" alt="Free HTML5 Website Template by FreeHTML5.co" class="img-responsive"><h3 class="fh5co-work-title">Cosmetic '+i+'</h3>$99,999</a></div>'
-  $(".data").append(template);
+  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a href="detail/'+NO+'.html"><img src="{{ url_for("static", filename="images/'+NO+'.jpg") }}" alt="'+name+'" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star checked" style="float: right">'+' '+score+'</span></div>';
+  $("#"+type).append(template);
+
+  if(fav_flag == true){
+    $('.fa-star').css("color","orange");
+  }
 };
 
 
 $(document).ready(function() {
-  addDynamicCosmetic("1ST", 1);
-  addDynamicCosmetic("1ST", 2);
-  addDynamicCosmetic("1ST", 3);
-  addDynamicCosmetic("2ND", 4);
-  addDynamicCosmetic("2ND", 5);
-  addDynamicCosmetic("2ND", 6);
-  addDynamicCosmetic("3RD", 7);
-  addDynamicCosmetic("3RD", 8);
-  addDynamicCosmetic("3RD", 9);
-  addDynamicCosmetic("4TH", 10);
-  addDynamicCosmetic("4TH", 11);
-  addDynamicCosmetic("4TH", 12);
+addDynamicCosmetic(1, "cosmetic 1", 11037, 3.4, "skin", true);
+addDynamicCosmetic(2, "cosmetic 2", 11037, 4.5, "lotion",  true);
+addDynamicCosmetic(3, "cosmetic 3", 11037, 3.9, "sunblock",  true);
+addDynamicCosmetic(4, "cosmetic 4", 11037, 4.1, "skin", true);
+addDynamicCosmetic(5, "cosmetic 5", 11037, 4.2, "lotion",  true);
+addDynamicCosmetic(6, "cosmetic 6", 11037, 3.7, "sunblock",  true);
+addDynamicCosmetic(7, "cosmetic 7", 11037, 3.9, "skin", true);
+addDynamicCosmetic(8, "cosmetic 8", 11037, 4.4, "lotion",  true);
+addDynamicCosmetic(9, "cosmetic 9", 11037, 4.1, "sunblock",  true);
+
 });
