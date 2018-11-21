@@ -1,0 +1,121 @@
+id,name,product_type,skin_type,price,rating
+1,Handbag Holiday Cutile Oil,CREAM,dry,100.1,1.7
+2,LIPPY,CREAM,oily,23.1,2.8
+3,Hardwear P.D. Quick Top Coat,CREAM,dry,41.3,1.6
+4,Horse Power Nail Fertilizer,CREAM,dry,149.1,3.2
+5,Kitten Heels Powder Finish Foot Creme,CREAM,sensitive,31.4,2.9
+6,Matte Finish Top Coat,CREAM,sensitive,85.4,2.6
+7,Melt Away Cuticle Eliminator,CREAM,dry,14.6,2.2
+8,Nail File,CREAM,dry,91.3,3.2
+9,Nail Foundation Flawless Base Coat,CREAM,oily,50.6,1.7
+10,Nail Lacquer,CREAM,oily,142.7,2
+11,Powder Room,CREAM,oily,86.4,4.6
+12,Rock Off Glycolic Callus Peel,CREAM,oily,145.4,2.7
+13,Royal Punch Remover,CREAM,sensitive,86.3,3
+14,Stiletto Stick Hydrating Heel Balm,CREAM,dry,114.4,2.8
+15,Angle Eye Shadow,CREAM,dry,83.1,1.9
+16,Beach Body Lotion,CREAM,sensitive,90,3.4
+17,Beach Body Oil,CREAM,sensitive,77.7,2.9
+18,Beach Body Scrub,CREAM,oily,75.1,2.9
+19,Beach Shower Gel,CREAM,sensitive,112.4,1.2
+20,Blush,CREAM,sensitive,36.4,2.1
+21,Brightening Finishing Powder,CREAM,sensitive,29.4,2.6
+22,Brightening Lip Gloss,CREAM,sensitive,131,2.7
+23,Bronzer,CREAM,oily,52,0.9
+24,Bronzing Powder,CREAM,dry,37.1,2.3
+25,Brush Cleaning Spray,CREAM,dry,81.6,2.3
+26,Buffing Grains for Face,CREAM,oily,24.2,2.9
+27,Concealer,CREAM,oily,40.3,2.1
+28,Concealer Blending,CREAM,oily,42.1,1.6
+29,Conditioning Brush Cleanser,CREAM,oily,29,2.5
+30,Cream Shadow,CREAM,dry,17.3,2.7
+31,Creamy Lip Color,CREAM,oily,57.3,2.2
+32,Creamy Matte Lip Color,CREAM,dry,38,2.1
+33,Crystal Lip Gloss,CREAM,sensitive,91.7,2.6
+34,Deluxe Size Hydrating Face Cream,CREAM,sensitive,35.7,2.8
+35,Everything Mascara,CREAM,oily,108.2,2.2
+36,EXTRA Balm Rinse,CREAM,dry,146.2,2.9
+37,EXTRA Eye Repair Cream,CREAM,sensitive,112.9,2.7
+38,EXTRA Face Oil,CREAM,oily,48.8,1
+39,EXTRA Repair Moisturizing Balm SPF 25,CREAM,dry,43.7,2.3
+40,EXTRA Repair Serum,CREAM,dry,22.1,1.9
+41,EXTRA Soothing Balm,CREAM,dry,19.2,3
+42,Extreme Party Mascara,CREAM,oily,144.1,2.4
+43,Eye Blender,CREAM,dry,139.3,1.6
+44,Eye Brow,CREAM,sensitive,10.1,3.5
+45,Eye Definer,MOSITURIZER,sensitive,47.4,2
+46,Eye Liner,MOSITURIZER,sensitive,115.5,1.5
+47,Eye Makeup Remover,MOSITURIZER,oily,33.5,2.3
+48,Eye Shadow,MOSITURIZER,oily,66,2.8
+49,Eye Smudge,MOSITURIZER,oily,47.2,0.2
+50,Eyelash Curler,MOSITURIZER,sensitive,13,3.1
+51,Face,MOSITURIZER,sensitive,74.1,3.1
+52,Face Blender,MOSITURIZER,sensitive,91.8,0.8
+53,Foundation,MOSITURIZER,dry,142.2,1.8
+54,Gentle Curl Eye Lash Curler,MOSITURIZER,dry,23.7,1.6
+55,High Shimmer Lip Gloss,MOSITURIZER,sensitive,92,3.5
+56,Hydrating Eye Cream,MOSITURIZER,oily,21.6,2.9
+57,Hydrating Face Cream,MOSITURIZER,sensitive,87.9,4.5
+58,Hydrating Face Tonic,MOSITURIZER,dry,20,2.7
+59,Hydrating Gel Cream,MOSITURIZER,oily,125.6,3.5
+60,Hydrating Intense Night Cream,MOSITURIZER,sensitive,65.6,2.1
+61,Hydrating Rich Cream Cleanser,MOSITURIZER,sensitive,136.1,2.5
+62,Illuminating Bronzing Powder,MOSITURIZER,oily,140.4,2.7
+63,Ink Eyeliner,MOSITURIZER,dry,106.9,1.5
+64,Instant Long-Wear Makeup Remover,MOSITURIZER,sensitive,141.7,1.9
+65,Intensifying Long-Wear Mascara,MOSITURIZER,oily,40.8,3.3
+66,Intensive Skin Supplement,MOSITURIZER,oily,10.1,3.3
+67,Lash Glamour Extreme Lengthening Mascara,MOSITURIZER,sensitive,112.4,3.7
+68,Lathering Tube Soap,MOSITURIZER,dry,63.6,3.9
+69,Lip Balm,MOSITURIZER,oily,87.3,2.7
+70,Lip Color,MOSITURIZER,dry,97.5,2
+71,Lip Gloss,MOSITURIZER,sensitive,13.2,3.1
+72,Lip Liner,MOSITURIZER,oily,20.6,3.3
+73,Long-Wear Cream Eyeshadow,MOSITURIZER,sensitive,33.4,2.3
+74,Long-Wear Cream Shadow Stick,MOSITURIZER,oily,29.7,2
+75,Long-Wear Eye Pencil,MOSITURIZER,dry,12.6,1.8
+76,Long-Wear Gel Eyeliner,MOSITURIZER,oily,14.9,1.5
+77,Metallic Eye Shadow,MOSITURIZER,sensitive,110.3,2.6
+78,Metallic Long-Wear Cream Shadow,MOSITURIZER,dry,75.6,2.1
+79,Nail Lacquer,MOSITURIZER,dry,35.6,1.6
+80,Natural Brow Shaper & hair Touch up,MOSITURIZER,dry,127.1,1.6
+81,No Smudge Mascara,MOSITURIZER,dry,76.5,3.6
+82,Pot Rouge for Lips & Cheeks,MOSITURIZER,dry,121.7,2.8
+83,Powder,MOSITURIZER,dry,79,0.9
+84,Protective Face Lotion,MOSITURIZER,dry,138.3,2.5
+85,Retouching Powder,MOSITURIZER,sensitive,49.9,3
+86,Retractable Lip,MOSITURIZER,dry,58.2,1.9
+87,Rich Color Gloss,MOSITURIZER,sensitive,13.4,1.9
+88,Rich Lip Color,MOSITURIZER,dry,107.9,2.5
+89,Sheer Color Cheek Tint,MOSITURIZER,dry,145.2,1.9
+90,Sheer Color Lip Gloss,SUNSCREEN,sensitive,34.8,2.9
+91,Sheer Finish Loose Powder,SUNSCREEN,sensitive,87.3,2
+92,Sheer Finish Pressed Powder,SUNSCREEN,oily,28.3,3
+93,Sheer Powder,SUNSCREEN,dry,90.1,1.1
+94,Shimmer Blush,SUNSCREEN,sensitive,112.6,3.2
+95,Shimmer Brick,SUNSCREEN,dry,67,2.2
+96,Shimmer Lip Gloss,SUNSCREEN,dry,78.5,2.5
+97,Shimmer Nail Lacquer,SUNSCREEN,oily,18.6,3.7
+98,Shimmer Wash Eye Shadow,SUNSCREEN,sensitive,20.3,2.1
+99,Soothing Cleansing Oil,SUNSCREEN,dry,121.6,3.6
+100,Sparkle Eye Shadow,SUNSCREEN,oily,111,2.4
+101,Touch Up,SUNSCREEN,sensitive,145.7,3
+102,Treatment Lip Shine,SUNSCREEN,dry,18.2,2
+103,Tweezer,SUNSCREEN,oily,54.5,2.8
+104,Ultra Fine Eyeliner,SUNSCREEN,dry,145.7,2.6
+105,Vitamin Enriched Face Base,SUNSCREEN,sensitive,121.6,2.2
+106,Lip Palette,SUNSCREEN,dry,122.2,1.8
+107,Bronzer/Blush Duo,SUNSCREEN,dry,122,2.6
+108,Eyeshadow Palette,SUNSCREEN,oily,18.4,2.9
+109,Eye Paint Palette,SUNSCREEN,dry,53.6,1.8
+110,Eye Paint Eye Shadow,SUNSCREEN,dry,76.2,4.9
+111,AMC Cream Blush,SUNSCREEN,sensitive,39.4,2.1
+112,AMC Face Blush,SUNSCREEN,dry,144,2.1
+113,AMC Multicolour System Powder FB Matte,SUNSCREEN,dry,53.4,2.8
+114,Face Blush,SUNSCREEN,sensitive,138,4.3
+115,Body Sparkles,SUNSCREEN,sensitive,23.8,2.2
+116,Body Pigment Powder Matte,SUNSCREEN,oily,63.7,2.4
+117,Body Pigment Powder Pearl,SUNSCREEN,dry,43.3,2.9
+118,AMC Face and Body Bronzer,SUNSCREEN,oily,76.8,2.6
+119,AMC Bronzing Powder,SUNSCREEN,sensitive,23.2,2.4
+120,AMC Multicolour System Bronzing Powder,SUNSCREEN,dry,149.6,2.6
