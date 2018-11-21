@@ -230,7 +230,7 @@ def change_id_to_name(cosmetic_name, cosmetic_cid, recommended_item):
         recommended_name.append(cosmetic_name[cosmetic_cid.index(cos_id)])
     return recommended_name
 
-def define_lisset(similarCos, similarUser, allRating):
+def define_listset(similarUser, similarCos, allRating):
 	uid_list = []
 	cid_list = []
 	rating_uid_list = []
