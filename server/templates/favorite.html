@@ -116,7 +116,13 @@
 					  <li><a data-toggle="tab" href="#sunblock">Sunblock</a></li>
 					</ul>
 
-					<div class="tab-content">
+					<div id = "test" class="tab-content">
+					<script>
+
+						 var fav_list = JSON.parse('{{ fav_list | tojson | safe }}');
+					 	
+						//document.getElementById("test").innerHTML = String(fav_list);
+					</script>
 					  <div id="home" class="tab-pane fade in active">
 
 					  </div>

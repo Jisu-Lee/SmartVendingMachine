@@ -102,6 +102,12 @@
 				<div class="row animate-box" data-animate-effect="fadeInLeft">
 					<div class="data"></div>
 
+					<script>
+						 var userInfo = JSON.parse('{{ userInfo | tojson | safe }}');
+						 var similarUser = JSON.parse('{{ similarUser | tojson | safe }}');
+						 var similarCos = JSON.parse('{{ similarCos | tojson | safe }}');
+						 var allRating = JSON.parse('{{ allRating | tojson | safe }}');
+					</script>
 
 
 
