@@ -230,24 +230,45 @@ def change_id_to_name(cosmetic_name, cosmetic_cid, recommended_item):
         recommended_name.append(cosmetic_name[cosmetic_cid.index(cos_id)])
     return recommended_name
 
-def define_listset(similarUser, similarCos, allRating):
+def define_lisset(similarCos, similarUser, allRating):
 	uid_list = []
 	cid_list = []
+	cname_list = []
 	rating_uid_list = []
 	rating_cid_list = []
 	rating_score_list = []
 
-	k = 0
+	
 	for i in range(len(similarUser)):
-		uid_list.append(similarUser[i]["id"])
+		uid_list.append(int(similarUser[i]["id"]))
 	
 	for i in range(len(similarCos)):
-		cid_list.append(similarCos[i]["id"])
+		cid_list.append(int(similarCos[i]["id"]))
+		cname_list.append(similarCos[i]["name"])
 
 	for i in range(len(allRating)):
-		rating_uid_list.append(allRating[i]["user_id"])
-		rating_cid_list.append(allRating[i]["cosmetic_id"])
-		rating_score_list.append(allRating[i]["rating"])
+		rating_uid_list.append(int(allRating[i]["user_id"]))
+		rating_cid_list.append(int(allRating[i]["cosmetic_id"]))
+		rating_score_list.append(float(allRating[i]["rating"]))
 
-	dataset = {'uid_list' : uid_list, 'cid_list' : cid_list, "rating_uid_list" : rating_uid_list, "rating_cid_list" : rating_cid_list, "rating_score_list" : rating_score_list}
+	dataset = {"uid_list" : uid_list,"cname_list" : cname_list, "cid_list" : cid_list, "rating_uid_list" : rating_uid_list, "rating_cid_list" : rating_cid_list, "rating_score_list" : rating_score_list}
+	return dataset
+
+def read_csv_and_make_list_dict_dataset(rating_file_name):
+	name_list = []
+	dataset = []
+	rinputFile = open(rating_file_name,'r')
+	rFile = csv.reader(rinputFile)
+	
+	for i,lines in enumerate(rFile):
+		if i is 0:
+			for line in lines:
+				name_list.append(line)
+		else:
+			dic_item = {}
+			for i,line in enumerate(lines):
+				dic_item[name_list[i]] = line
+			dataset.append(dic_item)
+	
+	rinputFile.close()
 	return dataset
