@@ -74,11 +74,11 @@
 			<!-- 여기에 기존 코드 -->
 			<nav id="fh5co-main-menu" role="navigation">
 				<ul>
-					<li><a href="{{ url_for('static', filename='list.html') }}">List</a></li>
-					<li><a href="{{ url_for('static', filename='favorite.html') }}">Favorite</a></li>
-					<li><a href="{{ url_for('static', filename='recommand.html') }}">Recommand</a></li>
-					<li class="fh5co-active"><a href="{{ url_for('static', filename='map.html') }}">Nearest Vending Machine</a></li>
-					<li><a href="{{ url_for('static', filename='userdata.html') }}">User Data</a></li>
+					<li><a href="{{ url_for('list') }}">List</a></li>
+					<li><a href="{{ url_for('favorite') }}">Favorite</a></li>
+					<li><a href="{{ url_for('recommand') }}">Recommand</a></li>
+					<li class="fh5co-active"><a href="{{ url_for('map') }}">Nearest Vending Machine</a></li>
+					<li><a href="{{ url_for('userdata') }}">User Data</a></li>
 				</ul>
 			</nav>
 
@@ -120,11 +120,13 @@
 	<script src="{{ url_for('static', filename='js/jquery.countTo.js') }}"></script>
 	<!-- Common --> <!-- 내가 넣은 거 -- >
 
-	<!-- Google Map -->
+	<!-- Google Map - for local
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxXwQulPQ-OzYdmN_FWwUllzjHoG45w1Y&sensor=false"></script>
 	<script src="{{ url_for('static', filename='js/google_map.js') }}"></script>
-
-
+ -->
+	<!-- Google Map -->
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxXwQulPQ-OzYdmN_FWwUllzjHoG45w1Y&callback=initMap"></script>
+   <script src="{{ url_for('static', filename='js/google_map.js') }}"></script>
 
 	<!-- MAIN JS -->
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
