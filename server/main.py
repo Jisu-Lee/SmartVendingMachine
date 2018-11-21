@@ -47,7 +47,6 @@ def main():
 
     return render_template('list.html')
 
-
 # local debugging    
 @app.route('/recommand')
 def test():
