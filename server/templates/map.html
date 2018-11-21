@@ -97,6 +97,15 @@
 		<div id="fh5co-main">
 
 			<div id="map"></div>
+			<!-- The Modal -->
+			<div id="myModal" class="modal">
+
+			  <div class="modal-content">
+			    <span class="close">&times;</span>
+
+			  </div>
+
+			</div>
 			<div id="data"></div>
 
 
@@ -122,8 +131,7 @@
 
 	<!-- Google Map - for local
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxXwQulPQ-OzYdmN_FWwUllzjHoG45w1Y&sensor=false"></script>
-	<script src="{{ url_for('static', filename='js/google_map.js') }}"></script>
- -->
+	-->
 	<!-- Google Map -->
    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxXwQulPQ-OzYdmN_FWwUllzjHoG45w1Y&callback=initMap"></script>
    <script src="{{ url_for('static', filename='js/google_map.js') }}"></script>

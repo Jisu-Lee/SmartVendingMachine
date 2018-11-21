@@ -2,7 +2,7 @@
  function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
 
    var imgNo = (NO)%5 + 1;
-   var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a href="/templates/detail.html"><img src="/static/images/' + imgNo + '.jpg" alt="WG" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star checked cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
+   var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a href="/templates/detail/'+NO+'.html"><img src="/static/images/' + imgNo + '.jpg" alt="WG" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star checked cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
 
    $("#"+type).append(template);
    $("#home").append(template);
@@ -25,5 +25,3 @@ $(document).ready(function(){
 	addDynamicCosmetic(i+1, fav_list[i]["name"], fav_list[i]["price"], fav_list[i]["rating"], fav_list[i]["product_type"], true)
 	}
 });
- 	
-
