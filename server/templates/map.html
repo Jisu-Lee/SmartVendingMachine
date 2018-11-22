@@ -95,6 +95,12 @@
 		</aside>
 
 		<div id="fh5co-main">
+			<script>
+				var data = JSON.parse('{{ data | tojson | safe }}');
+				var data2 = ('{{data}}');
+				var locations = JSON.parse('{{ locations | tojson | safe }}');
+				var locations2 = ('{{locations}}')
+			</script>	
 
 			<div id="map"></div>
 			<!-- The Modal -->

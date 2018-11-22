@@ -27,16 +27,35 @@ import pickle
 
 from flask import Flask, request, render_template
 
-#from google.cloud import datastore
-
+from google.cloud import datastore
 
 app = Flask(__name__)
+
+user_id = 1
+#cosmetics(id, name, price, score, skintype, fav_flag)
+ds = datastore.Client()
+query = ds.query(kind='cosmetics')
+entity = query.fetch()
+cosmetics = list(entity)    
+
+query = ds.query(kind='favorite')
+query.add_filter('user_id', '=', str(user_id))
+entity = query.fetch()
+userPick = []
+for i in range(len(cosmetics)):
+    cosmetics[j].update({'fav_flag':'false'})
+if(entity is not None):
+    userPick = list(entity)
+    for i in range(len(userPick)):
+        for j in range(len(cosmetics)):
+            if(cosmetics[j]['id'] == userPick[i]['cosmetic_id']):
+                cosmetics[j].update({'fav_flag':'true'})
 
 # [START main]
 @app.route('/list') 
 @app.route('/')
 def list():
-    return render_template('list.html')
+    return render_template('list.html', cosmetics=cosmetics, userPick=userPick)
 
 # local debugging    
 @app.route('/recommand')
@@ -96,17 +115,57 @@ def favorite():
     fav_list = [{"id": "110", "name": "eye paint eye shadow", "price": "76.2", "product_type": "sunscreen", "rating": "4.9", "skintype": "dry"}, {"id": "100", "name": "sparkle eye shadow", "price": "111", "product_type": "sunscreen", "rating": "2.4", "skintype": "oily"}, {"id": "102", "name": "treatment lip shine", "price": "18.2", "product_type": "sunscreen", "rating": "2", "skintype": "dry"}, {"id": "103", "name": "tweezer", "price": "54.5", "product_type": "sunscreen", "rating": "2.8", "skintype": "oily"}, {"id": "26", "name": "buffing grains for face", "price": "24.2", "product_type": "cream", "rating": "2.9", "skintype": "oily"}, {"id": "119", "name": "amc bronzing powder", "price": "23.2", "product_type": "sunscreen", "rating": "2.4", "skintype": "sensitive"}, {"id": "98", "name": "shimmer wash eye shadow", "price": "20.3", "product_type": "sunscreen", "rating": "2.1", "skintype": "sensitive"}, {"id": "120", "name": "amc multicolour system bronzing powder", "price": "149.6", "product_type": "sunscreen", "rating": "2.6", "skintype": "dry"}, {"id": "105", "name": "vitamin enriched face base", "price": "121.6", "product_type": "sunscreen", "rating": "2.2", "skintype": "sensitive"}, {"id": "80", "name": "natural brow shaper \u0026 hair touch up", "price": "127.1", "product_type": "mositurizer", "rating": "1.6", "skintype": "dry"}]
     return render_template('favorite.html', fav_list=fav_list)
 
-@app.route('/detail')
-def detail():
-    return render_template('detail.html')
 
 @app.route('/map')
 def map():
-    return render_template('map.html')
+    '''
+    var data = [
+      [1, ["skinA", 4], ["lotionA", 1], ["sunblockA", 2]],
+      [2, ["skinB", 5], ["lotionB", 2]],
+      [3, ["skinC", 6], ["lotionC", 3], ["sunblockC", 5]],
+      [4, ["skinD", 7], ["lotionD", 4]],
+      [5, ["skinE", 8], ["lotionE", 5], ["sunblockE", 6]]
+    ];
+    var locations = [
+     [1, 'CAU UNIV', 37.507126, 126.958049, "address1"],
+     [2, 'HeukSeok Subway', 37.508871, 126.963532, "address2"],
+     [3, 'Sangdo Subway', 37.502940, 126.947820, "address3"],
+     [4, 'Soongsil UNIV', 37.496335, 126.957390, "address4"],
+     [5, 'JangSeongBaegi Subway', 37.504847, 126.939065, "address5"]
+   ];
+
+    '''
+    ds = datastore.Client()
+    query = ds.query(kind='vending')
+    entity = query.fetch()
+    locations = list(entity)
+
+    query = ds.query(kind='stock')
+    entity = query.fetch()
+    stocks = list(entity)
+    # stock(cos_name, ven_id, rating)
+    data = []
+    for i in range(len(locations)):
+        data.append([])
+        data[i].append(int(locations[i]["id"]))
+        for j in range(len(stocks)):
+            if(data[i][0] == int(stocks[j]["ven_id"])):
+                tmp = []
+                tmp.append(stocks[j]["cos_name"])
+                tmp.append(stocks[j]["rating"])
+                data[i].append(tmp)
+
+    return render_template('map.html', data=data, locations=locations)
 
 @app.route('/userdata')
 def userdata():
-    return render_template('userdata.html')
+    query = ds.query(kind='user')
+    query.add_filter('id', '=', str(user_id))
+    entity = query.fetch()
+    user = []
+    if(entity is not None):
+        user = list(entity)
+    return render_template('userdata.html', user=user)
 
 @app.errorhandler(500)
 def server_error(e):
@@ -148,8 +207,8 @@ if __name__ == '__main__':
 
     return output, 200, {'Content-Type': 'text/plain; charset=utf-8'} 
     '''
-
-    '''
+@app.route('/data')
+def data():
     # reading cosmetic csv
     cinputFile = open('newproducts.csv','r',encoding='"UTF-8"')
     cFile = csv.reader(cinputFile)
@@ -213,4 +272,4 @@ if __name__ == '__main__':
             })
             ds.put(entity)
     vinputFile.close()
-    '''
+    return "done"

@@ -106,6 +106,10 @@
 			<div class="fh5co-narrow-content">
 				<h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">List <span></span></h2>
 				<div class="row animate-box" data-animate-effect="fadeInLeft">
+					<script>
+						var cosmetics = JSON.parse('{{ cosmetics | tojson | safe }}');
+						var userPick = JSON.parse('{{ userPick | tojson | safe }}');
+					</script>
 					<div class="data"></div>
 
 

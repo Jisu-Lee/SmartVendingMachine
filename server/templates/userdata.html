@@ -105,6 +105,9 @@
 						<h1>User data</h1>
 					</div>
 				</div>
+				<script>
+					var user = JSON.parse('{{ user | tojson | safe }}');
+				</script>
 				<form class="form-horizontal">
 				  <div class="form-group">
 
