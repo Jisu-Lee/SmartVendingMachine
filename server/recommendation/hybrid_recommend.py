@@ -178,9 +178,14 @@ def recommend_hybrid(user_id, similar_user_num, content_num, dataset):
 	user_id = int(user_id)
 	similar_user = most_similar_users(user_id, similar_user_num, dataset["ub_dataset"])
 	print('\nmost similar user : ', similar_user)
+	
 	cb_dataset = dataset['cb_dataset']
 	cb_dataset = cb_dataset[cb_dataset['User_id'].isin(similar_user)]
-	ratings_training = cb_dataset.sample(frac=1.0)
+	
+	print("similar user based cb_dataset")
+	print(cb_dataset)
+
+	ratings_training = cb_dataset.sample(frac=0.7)
 	ratings_test = cb_dataset.drop(ratings_training.index)
 	
 	# calculate adjusted ratings based on training data
@@ -190,9 +195,12 @@ def recommend_hybrid(user_id, similar_user_num, content_num, dataset):
 	# replace 0 adjusted rating values to 1*e-8 in order to avoid 0 denominator
 	adjusted_ratings.loc[adjusted_ratings['rating_adjusted'] == 0, 'rating_adjusted'] = 1e-8
 
+	print("adjusted_rating")
+	print(adjusted_ratings)
+	
 	# run the function to build similarity matrix
 	w_matrix = build_w_matrix(adjusted_ratings)
-
+	print("finish to make w_matrix")
 	# run the evaluation
 	#eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
 	#print('Evaluation result - precision: %f, recall: %f' % eval_result)
@@ -238,8 +246,7 @@ def define_dataset(user_uid, cosmetic_cid, rating_uid, rating_cid, rating_score)
 	uid_list = []
 	cid_list = []
 	score_list = []
-	print(user_uid)
-	print(cosmetic_cid)
+
 	k = 0
 	for i in range(len(rating_uid)):
 		if((rating_uid[i] in user_uid) and (rating_cid[i] in cosmetic_cid)):
@@ -261,7 +268,7 @@ def define_dataset(user_uid, cosmetic_cid, rating_uid, rating_cid, rating_score)
 def read_csv_and_make_list_dict_dataset(rating_file_name):
 	name_list = []
 	dataset = []
-	rinputFile = open(rating_file_name,'r')
+	rinputFile = open(rating_file_name,'r',encoding='"UTF-8"', errors='ignore')
 	rFile = csv.reader(rinputFile)
 	
 	for i,lines in enumerate(rFile):
@@ -277,23 +284,39 @@ def read_csv_and_make_list_dict_dataset(rating_file_name):
 	rinputFile.close()
 	return dataset
 
+def cluster_by_skin_type(dataset, skin_type):
+	clustered_dataset = []
+
+	for data in dataset:
+		if(data["skin_type"] == skin_type):
+			clustered_dataset.append(data)
+	
+	return clustered_dataset
+
 user_id = "1"
+skin_type = "dry"
 similar_user_num = 4
 content_num = 3
 
 #similarCos = [{"id": "109", "name": "test", "price": "76.2", "product_type": "SUNSCREEN", "rating": "4.9", "skintype": "dry"}, {"id": "110", "name": "Eye Paint Eye Shadow", "price": "76.2", "product_type": "SUNSCREEN", "rating": "4.9", "skintype": "dry"}, {"id": "102", "name": "Treatment Lip Shine", "price": "18.2", "product_type": "SUNSCREEN", "rating": "2", "skintype": "dry"}, {"id": "120", "name": "AMC Multicolour System Bronzing Powder", "price": "149.6", "product_type": "SUNSCREEN", "rating": "2.6", "skintype": "dry"}, {"id": "80", "name": "Natural Brow Shaper \u0026 hair Touch up", "price": "127.1", "product_type": "MOSITURIZER", "rating": "1.6", "skintype": "dry"}, {"id": "78", "name": "Metallic Long-Wear Cream Shadow", "price": "75.6", "product_type": "MOSITURIZER", "rating": "2.1", "skintype": "dry"}, {"id": "112", "name": "AMC Face Blush", "price": "144", "product_type": "SUNSCREEN", "rating": "2.1", "skintype": "dry"}, {"id": "82", "name": "Pot Rouge for Lips \u0026 Cheeks", "price": "121.7", "product_type": "MOSITURIZER", "rating": "2.8", "skintype": "dry"}, {"id": "63", "name": "Ink Eyeliner", "price": "106.9", "product_type": "MOSITURIZER", "rating": "1.5", "skintype": "dry"}, {"id": "75", "name": "Long-Wear Eye Pencil", "price": "12.6", "product_type": "MOSITURIZER", "rating": "1.8", "skintype": "dry"}, {"id": "106", "name": "Lip Palette", "price": "122.2", "product_type": "SUNSCREEN", "rating": "1.8", "skintype": "dry"}, {"id": "58", "name": "Hydrating Face Tonic", "price": "20", "product_type": "MOSITURIZER", "rating": "2.7", "skintype": "dry"}, {"id": "8", "name": "Nail File", "price": "91.3", "product_type": "CREAM", "rating": "3.2", "skintype": "dry"}, {"id": "7", "name": "Melt Away Cuticle Eliminator", "price": "14.6", "product_type": "CREAM", "rating": "2.2", "skintype": "dry"}, {"id": "40", "name": "EXTRA Repair Serum", "price": "22.1", "product_type": "CREAM", "rating": "1.9", "skintype": "dry"}, {"id": "70", "name": "Lip Color", "price": "97.5", "product_type": "MOSITURIZER", "rating": "2", "skintype": "dry"}, {"id": "93", "name": "Sheer Powder", "price": "90.1", "product_type": "SUNSCREEN", "rating": "1.1", "skintype": "dry"}, {"id": "95", "name": "Shimmer Brick", "price": "67", "product_type": "SUNSCREEN", "rating": "2.2", "skintype": "dry"}, {"id": "32", "name": "Creamy Matte Lip Color", "price": "38", "product_type": "CREAM", "rating": "2.1", "skintype": "dry"}, {"id": "84", "name": "Protective Face Lotion", "price": "138.3", "product_type": "MOSITURIZER", "rating": "2.5", "skintype": "dry"}, {"id": "81", "name": "No Smudge Mascara", "price": "76.5", "product_type": "MOSITURIZER", "rating": "3.6", "skintype": "dry"}, {"id": "39", "name": "EXTRA Repair Moisturizing Balm SPF 25", "price": "43.7", "product_type": "CREAM", "rating": "2.3", "skintype": "dry"}, {"id": "53", "name": "Foundation", "price": "142.2", "product_type": "MOSITURIZER", "rating": "1.8", "skintype": "dry"}, {"id": "104", "name": "Ultra Fine Eyeliner", "price": "145.7", "product_type": "SUNSCREEN", "rating": "2.6", "skintype": "dry"}, {"id": "109", "name": "Eye Paint Palette", "price": "53.6", "product_type": "SUNSCREEN", "rating": "1.8", "skintype": "dry"}, {"id": "24", "name": "Bronzing Powder", "price": "37.1", "product_type": "CREAM", "rating": "2.3", "skintype": "dry"}, {"id": "1", "name": "Handbag Holiday Cutile Oil", "price": "100.1", "product_type": "CREAM", "rating": "1.7", "skintype": "dry"}, {"id": "88", "name": "Rich Lip Color", "price": "107.9", "product_type": "MOSITURIZER", "rating": "2.5", "skintype": "dry"}, {"id": "41", "name": "EXTRA Soothing Balm", "price": "19.2", "product_type": "CREAM", "rating": "3", "skintype": "dry"}, {"id": "68", "name": "Lathering Tube Soap", "price": "63.6", "product_type": "MOSITURIZER", "rating": "3.9", "skintype": "dry"}, {"id": "113", "name": "AMC Multicolour System Powder FB Matte", "price": "53.4", "product_type": "SUNSCREEN", "rating": "2.8", "skintype": "dry"}, {"id": "96", "name": "Shimmer Lip Gloss", "price": "78.5", "product_type": "SUNSCREEN", "rating": "2.5", "skintype": "dry"}, {"id": "99", "name": "Soothing Cleansing Oil", "price": "121.6", "product_type": "SUNSCREEN", "rating": "3.6", "skintype": "dry"}, {"id": "107", "name": "Bronzer/Blush Duo", "price": "122", "product_type": "SUNSCREEN", "rating": "2.6", "skintype": "dry"}, {"id": "15", "name": "Angle Eye Shadow", "price": "83.1", "product_type": "CREAM", "rating": "1.9", "skintype": "dry"}, {"id": "36", "name": "EXTRA Balm Rinse", "price": "146.2", "product_type": "CREAM", "rating": "2.9", "skintype": "dry"}, {"id": "54", "name": "Gentle Curl Eye Lash Curler", "price": "23.7", "product_type": "MOSITURIZER", "rating": "1.6", "skintype": "dry"}, {"id": "86", "name": "Retractable Lip", "price": "58.2", "product_type": "MOSITURIZER", "rating": "1.9", "skintype": "dry"}, {"id": "117", "name": "Body Pigment Powder Pearl", "price": "43.3", "product_type": "SUNSCREEN", "rating": "2.9", "skintype": "dry"}, {"id": "43", "name": "Eye Blender", "price": "139.3", "product_type": "CREAM", "rating": "1.6", "skintype": "dry"}, {"id": "4", "name": "Horse Power Nail Fertilizer", "price": "149.1", "product_type": "CREAM", "rating": "3.2", "skintype": "dry"}, {"id": "25", "name": "Brush Cleaning Spray", "price": "81.6", "product_type": "CREAM", "rating": "2.3", "skintype": "dry"}, {"id": "14", "name": "Stiletto Stick Hydrating Heel Balm", "price": "114.4", "product_type": "CREAM", "rating": "2.8", "skintype": "dry"}, {"id": "79", "name": "Nail Lacquer", "price": "35.6", "product_type": "MOSITURIZER", "rating": "1.6", "skintype": "dry"}, {"id": "30", "name": "Cream Shadow", "price": "17.3", "product_type": "CREAM", "rating": "2.7", "skintype": "dry"}, {"id": "3", "name": "Hardwear P.D. Quick Top Coat", "price": "41.3", "product_type": "CREAM", "rating": "1.6", "skintype": "dry"}, {"id": "83", "name": "Powder", "price": "79", "product_type": "MOSITURIZER", "rating": "0.9", "skintype": "dry"}, {"id": "89", "name": "Sheer Color Cheek Tint", "price": "145.2", "product_type": "MOSITURIZER", "rating": "1.9", "skintype": "dry"}]
 #similarUser = [{"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"},{"birthyear": "1996", "gender": "male", "id": "89", "name": "Broderick", "pw": "1061", "skintype": "dry", "user_id": "Broderick"}, {"birthyear": "1991", "gender": "male", "id": "58", "name": "Jody", "pw": "1922", "skintype": "dry", "user_id": "Jody"}, {"birthyear": "1998", "gender": "male", "id": "79", "name": "Jaylin", "pw": "7845", "skintype": "dry", "user_id": "Jaylin"}, {"birthyear": "1991", "gender": "male", "id": "83", "name": "Randolph", "pw": "1611", "skintype": "dry", "user_id": "Randolph"}, {"birthyear": "1995", "gender": "male", "id": "68", "name": "Alexandre", "pw": "6852", "skintype": "dry", "user_id": "Alexandre"}, {"birthyear": "1997", "gender": "female", "id": "36", "name": "Hernan", "pw": "8164", "skintype": "dry", "user_id": "Hernan"}, {"birthyear": "1992", "gender": "male", "id": "24", "name": "Jayden", "pw": "7623", "skintype": "dry", "user_id": "Jayden"}, {"birthyear": "1995", "gender": "male", "id": "75", "name": "Kegan", "pw": "6139", "skintype": "dry", "user_id": "Kegan"}, {"birthyear": "1998", "gender": "male", "id": "41", "name": "Daron", "pw": "9906", "skintype": "dry", "user_id": "Daron"}, {"birthyear": "1997", "gender": "female", "id": "82", "name": "Giancarlo", "pw": "8880", "skintype": "dry", "user_id": "Giancarlo"}, {"birthyear": "1996", "gender": "male", "id": "96", "name": "Darrien", "pw": "9965", "skintype": "dry", "user_id": "Darrien"}, {"birthyear": "1994", "gender": "female", "id": "80", "name": "Titus", "pw": "5014", "skintype": "dry", "user_id": "Titus"}, {"birthyear": "1995", "gender": "male", "id": "15", "name": "Rasheed", "pw": "1410", "skintype": "dry", "user_id": "Rasheed"}, {"birthyear": "1995", "gender": "male", "id": "39", "name": "Augustus", "pw": "6719", "skintype": "dry", "user_id": "Augustus"}, {"birthyear": "1990", "gender": "male", "id": "4", "name": "Kellen", "pw": "1903", "skintype": "dry", "user_id": "Kellen"}, {"birthyear": "1996", "gender": "male", "id": "63", "name": "Auston", "pw": "9079", "skintype": "dry", "user_id": "Auston"}, {"birthyear": "1998", "gender": "female", "id": "93", "name": "Jerrell", "pw": "9834", "skintype": "dry", "user_id": "Jerrell"}, {"birthyear": "1997", "gender": "male", "id": "30", "name": "Rusty", "pw": "2889", "skintype": "dry", "user_id": "Rusty"}, {"birthyear": "1998", "gender": "female", "id": "3", "name": "Efren", "pw": "7497", "skintype": "dry", "user_id": "Efren"}, {"birthyear": "1994", "gender": "female", "id": "88", "name": "Brant", "pw": "2147", "skintype": "dry", "user_id": "Brant"}, {"birthyear": "1995", "gender": "female", "id": "53", "name": "Galen", "pw": "9368", "skintype": "dry", "user_id": "Galen"}, {"birthyear": "1992", "gender": "male", "id": "32", "name": "Trayvon", "pw": "6084", "skintype": "dry", "user_id": "Trayvon"}, {"birthyear": "1994", "gender": "female", "id": "25", "name": "Khari", "pw": "6047", "skintype": "dry", "user_id": "Khari"}, {"birthyear": "1992", "gender": "female", "id": "54", "name": "Najee", "pw": "1753", "skintype": "dry", "user_id": "Najee"}, {"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"}, {"birthyear": "1991", "gender": "female", "id": "7", "name": "Ted", "pw": "8066", "skintype": "dry", "user_id": "Ted"}, {"birthyear": "1995", "gender": "male", "id": "14", "name": "Misael", "pw": "5178", "skintype": "dry", "user_id": "Misael"}, {"birthyear": "1998", "gender": "male", "id": "86", "name": "Kelton", "pw": "8502", "skintype": "dry", "user_id": "Kelton"}, {"birthyear": "1994", "gender": "female", "id": "70", "name": "Storm", "pw": "3101", "skintype": "dry", "user_id": "Storm"}, {"birthyear": "1995", "gender": "male", "id": "81", "name": "Cristobal", "pw": "7973", "skintype": "dry", "user_id": "Cristobal"}, {"birthyear": "1998", "gender": "male", "id": "78", "name": "Isidro", "pw": "8873", "skintype": "dry", "user_id": "Isidro"}, {"birthyear": "1992", "gender": "female", "id": "43", "name": "Silas", "pw": "8804", "skintype": "dry", "user_id": "Silas"}, {"birthyear": "1995", "gender": "female", "id": "99", "name": "Layne", "pw": "7783", "skintype": "dry", "user_id": "Layne"}, {"birthyear": "1998", "gender": "female", "id": "8", "name": "Unknown", "pw": "7859", "skintype": "dry", "user_id": "Unknown"}, {"birthyear": "1994", "gender": "female", "id": "84", "name": "Dalvin", "pw": "1482", "skintype": "dry", "user_id": "Dalvin"}, {"birthyear": "1995", "gender": "male", "id": "40", "name": "Benny", "pw": "9200", "skintype": "dry", "user_id": "Benny"}, {"birthyear": "1999", "gender": "male", "id": "95", "name": "Carlo", "pw": "4785", "skintype": "dry", "user_id": "Carlo"}]
-similarUser = read_csv_and_make_list_dict_dataset("small_users.csv")
+user_data = read_csv_and_make_list_dict_dataset("newusers.csv")
+cosmetic_data = read_csv_and_make_list_dict_dataset("newproducts.csv")
+rating_data = read_csv_and_make_list_dict_dataset("newratings.csv")
+
+clustered_user  = cluster_by_skin_type(user_data, skin_type)
+clustered_cosmetic = cluster_by_skin_type(cosmetic_data, skin_type)
+
+'''
 similarCos = read_csv_and_make_list_dict_dataset("small_products.csv")
 allRating = read_csv_and_make_list_dict_dataset("small_ratings.csv")
 print("ratingFIle : ", allRating)
+'''
+listset = define_lisset(clustered_cosmetic,clustered_user,rating_data)
 
-listset = define_lisset(similarCos,similarUser,allRating)
-print("listset : ", listset)
 dataset = define_dataset(listset["uid_list"], listset["cid_list"], listset["rating_uid_list"], listset["rating_cid_list"], listset["rating_score_list"])
-print("dataset : ", dataset)
 recommended_id = recommend_hybrid(user_id,similar_user_num,content_num,dataset)
 print('\n', recommended_id)
 
-recommended_name = change_id_to_name(listset["cname_list"], listset["cid_list"], recommended_id)
-print('\nrecommend item : ', recommended_name)
+#recommended_name = change_id_to_name(listset["cname_list"], listset["cid_list"], recommended_id)
+#print('\nrecommend item : ', recommended_name)
