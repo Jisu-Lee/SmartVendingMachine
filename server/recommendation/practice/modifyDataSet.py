@@ -106,5 +106,16 @@ def setNewStockFile():
 					j = j - 1
 	outputFile.close()
 					
-setNewStockFile()
+def modifyProductFile():
+	pinputFile = open('newproducts.csv','r',encoding='"UTF-8"', errors='ignore')
+	pFile = csv.reader(pinputFile)
+	outputFile = open('newproduct_s.csv','w',encoding='"UTF-8"',newline='')
+	oFile = csv.writer(outputFile)
 
+	for i, line in enumerate(pFile):
+		oFile.writerow(line)
+	
+	pinputFile.close()
+	outputFile.close()
+
+modifyProductFile()

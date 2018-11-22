@@ -1,14 +1,121 @@
+var list = [[1, "cosmetic 1", 11037, 3.4, null, true],
+      [2, "cosmetic 2", 11037, 3.4, null,  false],
+      [3, "cosmetic 3", 11037, 3.4, null,  true]];
 
+var user_id = 1;
 function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
-
-  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a href="/templates/detail/'+NO+'.html"><img src="/static/images/'+NO+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star checked" style="float: right">'+' '+score+'</span></div>';
+  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a class="rate" id="cosmetic'+NO+'"><img src="/static/images/'+NO+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
   $(".data").append(template);
+  if(fav_flag == true){
+    $('#cos'+NO).css("color", "orange");
+  }
 };
 
+function setModalData(){
+
+  var template = '<div id="modal_data"><h1>Please Rate Me!</h1><fieldset class="rating"><input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label><input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label><input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label><input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label><input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label><input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label><input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label><input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label><input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label><input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label></fieldset><br><br></div>';
+
+  $("#modal_data").remove();
+  $(".modal-content").append(template);
+}
 
 $(document).ready(function() {
-addDynamicCosmetic(1, "cosmetic 1", 11037, 3.4, null, true);
-addDynamicCosmetic(2, "cosmetic 2", 11037, 3.4, null,  true);
-addDynamicCosmetic(3, "cosmetic 3", 11037, 3.4, null,  true);
 
+  $(document).on('click', '.fa-star', function (e) {
+          //e.stopPropagation();
+          var cosmetic_id = this.id; //cosmetic id
+          cosmetic_id = parseInt(cosmetic_id.replace("cos", ""));
+          var myObj = new Object();
+
+          if($('#'+this.id).css("color") == "rgb(255, 165, 0)"){
+            //favorite cancle
+            $('#'+this.id).css("color", "gray");
+          var fav_data = [user_id, cosmetic_id, false];  //id = userID, data = cosmeticID
+          }else{
+              //favorite
+              $('#'+this.id).css("color", "orange");
+              var fav_data = [user_id, cosmetic_id, true];  //id = userID, data = cosmeticID
+          }
+
+          myObj.data = fav_data;
+          var jsonText =  JSON.stringify(myObj);
+          console.log(jsonText);
+          $.ajax({
+                  url: '/list',
+                  data: jsonText,
+                  type: 'POST',
+                  dataType: "json",
+                  contentType: 'application/json;charset=UTF-8',
+                  success: function(response) {
+                      console.log(response);
+                  },
+                  error: function(error) {
+                      console.log(error);
+                  }
+              });
+
+      });
+
+$(document).on('click', '.rate', function (e) {
+  var cosmetic_id = this.id; //cosmetic id
+  cosmetic_id = parseInt(cosmetic_id.replace("cosmetic", ""));
+
+
+    var modal = document.getElementById('myModal');
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    modal.style.display = "block";
+    setModalData();
+    // When the user clicks the button, open the modal
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        $("#modal_data").remove();
+        console.log(e);
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            $("#modal_data").remove();
+            modal.style.display = "none";
+        }
+    }
+
+    $('input[name="rating"]').off().on('click', function() {
+        console.log(e);
+
+        var rate_score = this.value
+        var myObj = new Object();
+        alert(user_id+"/"+cosmetic_id+"/"+rate_score);
+
+        var rate_data = [user_id, cosmetic_id, rate_score];  //id = userID, data = cosmeticID
+        myObj.data = rate_data;
+        var jsonText =  JSON.stringify(myObj);
+        console.log(jsonText);
+        $.ajax({
+                url: '/list',
+                data: jsonText,
+                type: 'POST',
+                dataType: "json",
+                contentType: 'application/json;charset=UTF-8',
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+        modal.style.display = "none";
+
+    });
+
+
+});
+
+
+addDynamicCosmetic(1, "cosmetic 1", 11037, 3.4, null, true);
+addDynamicCosmetic(2, "cosmetic 2", 11037, 3.4, null,  false);
+addDynamicCosmetic(3, "cosmetic 3", 11037, 3.4, null,  true);
 });
