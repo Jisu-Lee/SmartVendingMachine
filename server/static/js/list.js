@@ -7,10 +7,14 @@ var list = [[1, "cosmetic 1", 11037, 3.4, null, true],
 //modify
 function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
   imgNo = (Math.floor(Math.random() * 10)) % 3 + 1;
-  console.log(type+"_"+imgNo);
+
+  //if(name.length > 29)
   var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a class="rate" id="cosmetic'+NO+'"><img src="/static/images/'+type+"_"+imgNo+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
   $(".data").append(template);
-  if(fav_flag != -1){
+
+  if(fav_flag == "true"){
+    console.log(fav_flag);
+
     $('#cos'+NO).css("color", "orange");
   }
 };
@@ -52,12 +56,12 @@ $(document).ready(function() {
                                                       console.log(response);
                                                       if(reponse["status"] == "ok"){
 	                                                    $('#'+cosmetic_id).css("color", "gray");
-	                                                    window.location.href='http://127.0.0.1:8080/list'
+	                                                    window.location.href='https://wannagraduate-220706.appspot.com/list'
                                                       }
 
                                                   },
                                                   error: function(error) {
-                                                      console.log(error);
+                                                      console.log("error");
                                                   }
                                               });
 
@@ -91,7 +95,7 @@ $(document).ready(function() {
 
 
                     console.log(cosmetic_id);
-                    var rate_score = this.value;
+                    var rate_score = parseInt(this.value);
                     cosmetic_id = parseInt(cosmetic_id.replace("cos", ""));
                     var myObj = new Object();
 
@@ -112,11 +116,12 @@ $(document).ready(function() {
                                         	if(response["status"] == "ok"){
                                             	
                                             	$('#'+cosmetic_id).css("color", "orange");
-                                            	alert("영은이귀엽다");
-                                        	window.location.href='http://127.0.0.1:8080/list'}
+                                            	alert("debug");
+                                        	window.location.href='https://wannagraduate-220706.appspot.com/list';
+                                        }
                                         },
                                         error: function(error) {
-                                            console.log(error);
+                                            console.log("error");
                                         }
                                     });
 

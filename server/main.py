@@ -125,8 +125,8 @@ def updatefav():
         if(rating >= 0):
             datastore.Entity(key=ds.key('favorite'))
             entity.update({
-                'cosmetic_id': cid
-                'user_id': uid
+                'cosmetic_id': cid,
+                'user_id': uid,
                 'rating': str(rating)
                 })
             ds.put(entity)

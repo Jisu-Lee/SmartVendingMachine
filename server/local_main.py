@@ -114,7 +114,6 @@ def updatefav():
 			tmp["rating"] = str(rating)
 			ratings.append(tmp)
 			print(tmp)
-			print(ratings)
 		else:
 			print("else")
 		return json.dumps({'status':'ok'})
