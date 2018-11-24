@@ -220,7 +220,7 @@ def recommand_hybrid(user_id, similar_user_num, content_num, dataset):
     print('Evaluation result - precision: %f, recall: %f' % eval_result)
 
     # get a recommandation list for a given user
-    recommanded_cosmetics = recommandCB(2, w_matrix, adjusted_ratings, rating_mean)
+    recommanded_cosmetics = recommandCB(user_id, w_matrix, adjusted_ratings, rating_mean)
     return recommanded_cosmetics[0:content_num]
 
 def change_id_to_name(cosmetic_name, cosmetic_cid, selected_id_list):
