@@ -18,6 +18,7 @@ import logging
 import algo
 
 # related to recommandation algorithm
+from operator import itemgetter
 import csv
 import pandas as pd
 import numpy as np
