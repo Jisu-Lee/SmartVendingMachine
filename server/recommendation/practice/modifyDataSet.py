@@ -119,4 +119,27 @@ def modifyProductFile():
 	pinputFile.close()
 	outputFile.close()
 
-modifyProductFile()
+def setRenameProductFile():
+	inputFile = open('small_products.csv','r',encoding='"UTF-8"')
+	iFile = csv.reader(inputFile)
+	outputFile = open('re_small_products.csv','w',encoding='"UTF-8"',newline='')
+	oFile = csv.writer(outputFile)
+
+	save_line = []
+	count = 0
+	for i, line in enumerate(iFile):	
+		if(i<=45):
+			if(i is not 0):
+				save_line.append(line)
+				count = count+1
+		elif(i<=90):
+			line = [line[0],save_line[i-46][1].replace("cream","moisturize"),line[2],line[3],line[4],line[5]]
+		else:
+			line = [line[0],save_line[i-91][1].replace("cream","sunblock"),line[2],line[3],line[4],line[5]]
+		oFile.writerow(line)
+	print(count)
+	inputFile.close()
+	outputFile.close()				
+
+
+setRenameProductFile()
