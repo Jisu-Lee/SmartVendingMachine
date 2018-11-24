@@ -145,18 +145,12 @@ def recommand():
     allRating = list(entity)
 
     recommanded_name = ["a", "b", "c"]
-    list_dataset = algo.define_listset(similarUser, similarCos, allRating)
-    dataset = algo.define_dataset(list_dataset["uid_list"], list_dataset["cid_list"], list_dataset["rating_uid_list"], list_dataset["rating_cid_list"], list_dataset["rating_score_list"])
-
-    while True:
-        try:
-            recommanded_id = algo.recommand_hybrid(user_id,10,3,dataset)
-            break
-        except ZeroDivisionError:
-            logging.info("Oops!  That was no valid number.  Try again...")
-
-    recommanded_name = algo.change_id_to_name(list_dataset["cname_list"], list_dataset["cid_list"], recommanded_id["Cos_id"])
     
+    
+    recommanded_name = recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "CREAM")
+    recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "MOSITURIZER")
+    recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "SUNSCREEN")
+
     cosmetics = getCosmeticsWithFav()
     recommanded_cos = []
     n = len(cosmetics)
@@ -167,7 +161,39 @@ def recommand():
                 break
 
     return render_template('recommand.html', recommanded_cos=recommanded_cos, similarCos=similarCos, similarUser=similarUser, allRating=allRating)
-                
+
+def recommand_product_type(user_id, similar_user_num, content_num, similarUser, similarCos, allRating, product_type):   
+    similarCos = clustered_by_product_type(similarCos, product_type)
+    list_dataset = algo.define_listset(similarUser, similarCos, allRating)
+    dataset = algo.define_dataset(list_dataset["uid_list"], list_dataset["cid_list"], list_dataset["rating_uid_list"], list_dataset["rating_cid_list"], list_dataset["rating_score_list"])
+
+    recommanded_id = {}
+    while True:
+        try:
+            recommanded_id = algo.recommand_hybrid(user_id,similar_user_num,content_num,dataset)
+            break
+        except ZeroDivisionError:
+            logging.info("Oops!  That was no valid number.  Try again...")
+        except algo.NoDataError:
+            sorted_similarCos = sorted(similarCos, key=itemgetter('rating'), reverse = True)
+            recommanded_id_list = []
+            for i, cosmetic in enumerate(sorted_similarCos):
+                if(i<content_num):
+                    recommanded_id_list.append(int(cosmetic["id"]))
+                else:
+                    break
+            recommanded_id = {"Cos_id" : recommanded_id_list}
+            break
+    return algo.change_id_to_name(list_dataset["cname_list"], list_dataset["cid_list"], recommanded_id["Cos_id"])
+
+def clustered_by_product_type(dataset, product_type):
+    clustered_dataset = []
+    
+    for data in dataset:
+        if(data["product_type"] == product_type):
+            clustered_dataset.append(data)
+    
+    return clustered_dataset                
 
 @app.route('/favorite')
 def favorite():
