@@ -102,13 +102,14 @@
 
 		</aside>
 
-		<div id="fh5co-main">
+		<div id="fh5co-main" data-url="{{ url_for('getlist') }}">
 
 			<div class="fh5co-narrow-content">
 				<h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">List <span></span></h2>
 				<div class="row animate-box" data-animate-effect="fadeInLeft">
 					<script>
 						var list = JSON.parse('{{ cosList | tojson | safe }}');
+						var user_id = JSON.parse('{{ user_id | tojson | safe}}');
 
 					</script>
 					<div class="data"></div>
