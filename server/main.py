@@ -83,7 +83,6 @@ def getlogin():
     return json.dumps({'status':'fail'})
 
 @app.route('/list') 
-@app.route('/')
 def getlist():
     cosmetics = getCosmeticsWithFav()
     cosList = []
