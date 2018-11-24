@@ -98,9 +98,8 @@
 		<div id="fh5co-main">
 			<script>
 				var data = JSON.parse('{{ data | tojson | safe }}');
-				var data2 = ('{{data}}');
 				var locations = JSON.parse('{{ locations | tojson | safe }}');
-				var locations2 = ('{{locations}}')
+				var rec_name = JSON.parse('{{ rec_name | tojson | safe }}');
 			</script>
 
 			<div id="map"></div>

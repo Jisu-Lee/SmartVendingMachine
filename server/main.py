@@ -61,6 +61,12 @@ def getUsers():
     entity = query.fetch()
     return list(entity)
 
+def allRatings():
+    ds = datastore.Client()
+    query = ds.query(kind='favorite')
+    entity = query.fetch()
+    return list(entity)
+
 @app.route('/')
 @app.route('/login')
 def login():
@@ -109,16 +115,30 @@ remove: {"data":[user, cos, -1]}
 @app.route('/updatefav', methods=['GET','POST'])
 def updatefav():
     print(request.json)
-
     if request.json:
         data = request.json
         uid = data["data"][0]
         cid = data["data"][1]
-        rating = data["data"][2]
+        rating = float(data["data"][2])
         print(uid, ",", cid, ",", rating)
-#favorite table
-    
-    return redirect(url_for('getlist'))
+        ratings = getRatings()
+        if(rating >= 0):
+            datastore.Entity(key=ds.key('favorite'))
+            entity.update({
+                'cosmetic_id': cid,
+                'user_id': uid,
+                'rating': str(rating)
+                })
+            ds.put(entity)
+        else:
+            query = ds.query(kind='favorite')
+            query.add_filter('cosmetic_id', '=', uid)
+            query.add_fileter('user_id', '=', uid)
+            query.add_fileter('rating', '=', rating)
+            entity = query.fetch()
+            client.delete(entity.key)
+        return json.dumps({'status':'ok'})
+    return json.dumps({'status':'fail'})
 
 # local debugging    
 @app.route('/recommand')

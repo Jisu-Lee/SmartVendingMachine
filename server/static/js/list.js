@@ -11,8 +11,10 @@ function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
   //if(name.length > 29)
   var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a class="rate" id="cosmetic'+NO+'"><img src="/static/images/'+type+"_"+imgNo+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
   $(".data").append(template);
+
   if(fav_flag == "true"){
     console.log(fav_flag);
+
     $('#cos'+NO).css("color", "orange");
   }
 };
@@ -53,7 +55,10 @@ $(document).ready(function() {
                                                   contentType: 'application/json;charset=UTF-8',
                                                   success: function(response) {
                                                       console.log(response);
-                                                      $('#'+cosmetic_id).css("color", "gray");
+                                                      if(reponse["status"] == "ok"){
+	                                                    $('#'+cosmetic_id).css("color", "gray");
+	                                                    window.location.href='https://wannagraduate-220706.appspot.com/list'
+                                                      }
 
                                                   },
                                                   error: function(error) {
@@ -109,8 +114,12 @@ $(document).ready(function() {
                                         contentType: 'application/json;charset=UTF-8',
                                         success: function(response) {
                                             console.log(response);
-                                            $('#'+cosmetic_id).css("color", "orange");
-
+                                        	if(response["status"] == "ok"){
+                                            	
+                                            	$('#'+cosmetic_id).css("color", "orange");
+                                            	alert("debug");
+                                        	window.location.href='https://wannagraduate-220706.appspot.com/list';
+                                        }
                                         },
                                         error: function(error) {
                                             console.log("error");

@@ -1,6 +1,7 @@
 latitude = 37.5031256;
 longitude = 126.9570334;
 /*
+var rec_name = ["mascara", "AC cream", ...]
 var data = [
   [1, ["skinA", 4], ["lotionA", 1], ["sunblockA", 2]],
   [2, ["skinB", 5], ["lotionB", 2]],
