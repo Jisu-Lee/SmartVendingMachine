@@ -1,5 +1,6 @@
 latitude = 37.5031256;
 longitude = 126.9570334;
+/*
 var data = [
   [1, ["skinA", 4], ["lotionA", 1], ["sunblockA", 2]],
   [2, ["skinB", 5], ["lotionB", 2]],
@@ -14,7 +15,7 @@ var locations = [
      [4, 'Soongsil UNIV', 37.496335, 126.957390, "address4"],
      [5, 'JangSeongBaegi Subway', 37.504847, 126.939065, "address5"]
    ];
-
+*/
 function addLocation(lat, lng){
 
      var map = new google.maps.Map(document.getElementById('map'), {

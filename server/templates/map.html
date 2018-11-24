@@ -75,7 +75,7 @@
 			<!-- 여기에 기존 코드 -->
 			<nav id="fh5co-main-menu" role="navigation">
 				<ul>
-					<li><a href="{{ url_for('list') }}">List</a></li>
+					<li><a href="{{ url_for('getlist') }}">List</a></li>
 					<li><a href="{{ url_for('favorite') }}">Favorite</a></li>
 					<li><a href="{{ url_for('recommand') }}">Recommand</a></li>
 					<li class="fh5co-active"><a href="{{ url_for('map') }}">Nearest Vending Machine</a></li>
@@ -96,6 +96,12 @@
 		</aside>
 
 		<div id="fh5co-main">
+			<script>
+				var data = JSON.parse('{{ data | tojson | safe }}');
+				var data2 = ('{{data}}');
+				var locations = JSON.parse('{{ locations | tojson | safe }}');
+				var locations2 = ('{{locations}}')
+			</script>	
 
 			<div id="map"></div>
 			<!-- The Modal -->
