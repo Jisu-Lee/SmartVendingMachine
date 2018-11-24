@@ -29,13 +29,16 @@ def define_dataset(user_uid, cosmetic_cid, rating_uid, rating_cid, rating_score)
     return dataset
 
 def pearson_correlation(person1,person2, dataset):
-
     # To get both rated items
     both_rated = {}
-    for item in dataset[person1]:
-        if item in dataset[person2]:
-            both_rated[item] = 1
-            
+    try:
+        for item in dataset[person1]:
+            if item in dataset[person2]:
+                both_rated[item] = 1
+    except Exception as ex:
+        print("error key is ", ex)
+        raise NoDataError
+
     number_of_ratings = len(both_rated)
     
     # Checking for number of ratings in common
@@ -65,8 +68,11 @@ def pearson_correlation(person1,person2, dataset):
 # use pearson_correlation for find n-most similar user
 def most_similar_users(person,number_of_users, dataset):
     # returns the number_of_users (similar persons) for a given specific person.
-    scores = [(pearson_correlation(person,other_person, dataset),other_person) for other_person in dataset if  other_person != person ]
-    
+    try:
+        scores = [(pearson_correlation(person,other_person, dataset),other_person) for other_person in dataset if  other_person != person ]
+    except NoDataError as ex:
+        raise NoDataError
+        
     # Sort the similar persons so that highest scores person will appear at the first
     scores.sort()
     scores.reverse()
@@ -198,8 +204,11 @@ def recommandCB(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
 
 def recommand_hybrid(user_id, similar_user_num, content_num, dataset):
     user_id = int(user_id)
-    similar_user = most_similar_users(user_id, similar_user_num, dataset['ub_dataset'])
-    
+    try:
+        similar_user = most_similar_users(user_id, similar_user_num, dataset['ub_dataset'])
+    except NoDataError:
+        raise NoDataError
+
     cb_dataset = dataset['cb_dataset']
     cb_dataset = cb_dataset[cb_dataset['User_id'].isin(similar_user)]
     ratings_training = cb_dataset.sample(frac=0.7)
@@ -220,10 +229,11 @@ def recommand_hybrid(user_id, similar_user_num, content_num, dataset):
     print('Evaluation result - precision: %f, recall: %f' % eval_result)
 
     # get a recommandation list for a given user
-    recommanded_cosmetics = recommandCB(2, w_matrix, adjusted_ratings, rating_mean)
+    recommanded_cosmetics = recommandCB(user_id, w_matrix, adjusted_ratings, rating_mean)
     return recommanded_cosmetics[0:content_num]
 
 def change_id_to_name(cosmetic_name, cosmetic_cid, selected_id_list):
+    print(selected_id_list)
     recommanded_name = []
     for cos_id in selected_id_list:
         recommanded_name.append(cosmetic_name[cosmetic_cid.index(cos_id)])
@@ -271,3 +281,6 @@ def read_csv_and_make_list_dict_dataset(rating_file_name):
 	
 	rinputFile.close()
 	return dataset
+
+class NoDataError(Exception):
+    pass
