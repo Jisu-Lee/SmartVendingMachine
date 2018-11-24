@@ -231,7 +231,7 @@ void display_pin_values(){
       }
       else if(channel == 8){  
         servo_2.write(SPRING_COUNTER_CLOCK);
-        delay(SPRING_DELAY);
+        delay(SPRING_DELAY-100);
       }
     }
   }
