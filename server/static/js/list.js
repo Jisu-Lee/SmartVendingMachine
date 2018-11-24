@@ -38,7 +38,8 @@ $(document).ready(function() {
                               cosmetic_id = parseInt(cosmetic_id.replace("cos", ""));
                               var myObj = new Object();
 
-                              alert(user_id+"/"+cosmetic_id+"/-1");
+                              //alert(user_id+"/"+cosmetic_id+"/-1");
+                              //alert("favorite cancel");
 
                               var rate_data = [user_id, cosmetic_id, -1];  //id = userID, data = cosmeticID
                               myObj.data = rate_data;
@@ -94,7 +95,7 @@ $(document).ready(function() {
                     cosmetic_id = parseInt(cosmetic_id.replace("cos", ""));
                     var myObj = new Object();
 
-                    alert(user_id+"/"+cosmetic_id+"/"+rate_score);
+                    //alert("rate: "+rate_score);
 
                     var rate_data = [user_id, cosmetic_id, rate_score];  //id = userID, data = cosmeticID
                     myObj.data = rate_data;
