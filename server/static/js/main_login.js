@@ -1,7 +1,6 @@
 
-(function ($) {
+$(document).ready(function() {
     "use strict";
-
 
     /*==================================================================
     [ Validate ]*/
@@ -17,7 +16,11 @@
             }
         }
 
-        return check;
+        if(check == true){
+          sendDataAJAX(input);
+        }
+
+        return false;
     });
 
 
@@ -52,6 +55,33 @@
         $(thisAlert).removeClass('alert-validate');
     }
 
+    function sendDataAJAX(input) {
+
+        var myObj = new Object();
+        //alert($('input[name="username"]').val()+"/"+$('input[name=pass]').val());
+
+        var login_data = [$('input[name="username"]').val(), $('input[name="pass"]').val()];  //id = userID, data = cosmeticID
+        myObj.data = login_data;
+        var jsonText =  JSON.stringify(myObj);
+        console.log(jsonText);
+        $.ajax({
+                url: '/login',
+                data: jsonText,
+                type: 'POST',
+                dataType: "json",
+                contentType: 'application/json;charset=UTF-8',
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+
+                }
+            });
+            return false;
+
+    }
 
 
-})(jQuery);
+
+});
