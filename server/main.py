@@ -25,7 +25,7 @@ import math
 from math import sqrt
 import pickle
 
-from flask import Flask, request, render_template
+from flask import Flask, request, redirect, url_for, render_template
 
 from google.cloud import datastore
 
@@ -33,28 +33,32 @@ app = Flask(__name__)
 
 user_id = 1
 #cosmetics(id, name, price, score, skintype, fav_flag)
-ds = datastore.Client()
-query = ds.query(kind='cosmetics')
-entity = query.fetch()
-cosmetics = list(entity)    
+def getCosmeticsWithFav():
+    ds = datastore.Client()
+    query = ds.query(kind='cosmetics')
+    entity = query.fetch()
+    cosmetics = list(entity)    
 
-query = ds.query(kind='favorite')
-query.add_filter('user_id', '=', str(user_id))
-entity = query.fetch()
-userPick = []
-for i in range(len(cosmetics)):
-    cosmetics[i].update({'fav_flag':'false'})
-if(entity is not None):
-    userPick = list(entity)
-    for i in range(len(userPick)):
-        for j in range(len(cosmetics)):
-            if(cosmetics[j]['id'] == userPick[i]['cosmetic_id']):
-                cosmetics[j].update({'fav_flag':'true'})
+    query = ds.query(kind='favorite')
+    query.add_filter('user_id', '=', str(user_id))
+    entity = query.fetch()
+    userPick = []
+    for i in range(len(cosmetics)):
+        cosmetics[i].update({'fav_flag':'false'})
+    if(entity is not None):
+        userPick = list(entity)
+        for i in range(len(userPick)):
+            for j in range(len(cosmetics)):
+                if(cosmetics[j]['id'] == userPick[i]['cosmetic_id']):
+                    cosmetics[j].update({'fav_flag':'true'})
+    return cosmetics                    
+
 
 # [START main]
 @app.route('/list') 
 @app.route('/')
 def getlist():
+    cosmetics = getCosmeticsWithFav()
     cosList = []
     for tmp in cosmetics:
         list_item = [int(tmp["id"]), tmp["name"], float(tmp["price"]), float(tmp["rating"]), tmp["product_type"], tmp["fav_flag"]]
@@ -70,6 +74,24 @@ def getlist():
             cosList[i][4] = "lotion"
 
     return render_template('list.html', cosList=cosList, userPick=userPick)
+
+'''
+add: {"data":[user, cos, rating]}
+remove: {"data":[user, cos, -1]}
+'''
+@app.route('/updatefav', methods=['GET','POST'])
+def updatefav():
+    print(request.json)
+
+    if request.json:
+        data = request.json
+        uid = data["data"][0]
+        cid = data["data"][1]
+        rating = data["data"][2]
+        print(uid, ",", cid, ",", rating)
+#favorite table
+    
+    return redirect(url_for('getlist'))
 
 # local debugging    
 @app.route('/recommand')
@@ -110,6 +132,7 @@ def recommand():
 
     recommanded_name = algo.change_id_to_name(list_dataset["cname_list"], list_dataset["cid_list"], recommanded_id["Cos_id"])
     
+    cosmetics = getCosmeticsWithFav()
     recommanded_cos = []
     n = len(cosmetics)
     for i in range(len(recommanded_name)):
@@ -124,17 +147,22 @@ def recommand():
 
 @app.route('/favorite')
 def favorite():
+    cosmetics = getCosmeticsWithFav()
     fav_list = []
     for i in range(len(cosmetics)):
         if(cosmetics[i]['fav_flag'] == 'true'):
             fav_list.append(cosmetics[i])
-    #fav_list = [{"id": "110", "name": "eye paint eye shadow", "price": "76.2", "product_type": "sunscreen", "rating": "4.9", "skintype": "dry"}, {"id": "100", "name": "sparkle eye shadow", "price": "111", "product_type": "sunscreen", "rating": "2.4", "skintype": "oily"}, {"id": "102", "name": "treatment lip shine", "price": "18.2", "product_type": "sunscreen", "rating": "2", "skintype": "dry"}, {"id": "103", "name": "tweezer", "price": "54.5", "product_type": "sunscreen", "rating": "2.8", "skintype": "oily"}, {"id": "26", "name": "buffing grains for face", "price": "24.2", "product_type": "cream", "rating": "2.9", "skintype": "oily"}, {"id": "119", "name": "amc bronzing powder", "price": "23.2", "product_type": "sunscreen", "rating": "2.4", "skintype": "sensitive"}, {"id": "98", "name": "shimmer wash eye shadow", "price": "20.3", "product_type": "sunscreen", "rating": "2.1", "skintype": "sensitive"}, {"id": "120", "name": "amc multicolour system bronzing powder", "price": "149.6", "product_type": "sunscreen", "rating": "2.6", "skintype": "dry"}, {"id": "105", "name": "vitamin enriched face base", "price": "121.6", "product_type": "sunscreen", "rating": "2.2", "skintype": "sensitive"}, {"id": "80", "name": "natural brow shaper \u0026 hair touch up", "price": "127.1", "product_type": "mositurizer", "rating": "1.6", "skintype": "dry"}]
+            if(len(fav_list) > 10):
+                break
+    for i in range(len(fav_list)):
+        fav_list[i]["rating"] = float(fav_list[i]["rating"])
+    fav_list = sorted(fav_list, key=lambda k: k['rating'], reverse=True)
     return render_template('favorite.html', fav_list=fav_list)
 
 
 @app.route('/map')
 def map():
-
+    cosmetics = getCosmeticsWithFav()
     ds = datastore.Client()
     query = ds.query(kind='vending')
     entity = query.fetch()

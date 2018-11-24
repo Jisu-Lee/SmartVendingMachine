@@ -45,7 +45,7 @@ $(document).ready(function() {
           var jsonText =  JSON.stringify(myObj);
           console.log(jsonText);
           $.ajax({
-                  url: '/list',
+                  url: '/updatefav',
                   data: jsonText,
                   type: 'POST',
                   dataType: "json",
@@ -98,7 +98,7 @@ $(document).on('click', '.rate', function (e) {
         var jsonText =  JSON.stringify(myObj);
         console.log(jsonText);
         $.ajax({
-                url: '/list',
+                url: '/updatefav',
                 data: jsonText,
                 type: 'POST',
                 dataType: "json",
