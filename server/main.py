@@ -67,6 +67,8 @@ def allRatings():
     entity = query.fetch()
     return list(entity)
 
+recommanded_name_gl
+
 @app.route('/')
 @app.route('/login')
 def login():
@@ -171,7 +173,8 @@ def recommand():
     recommanded_name = recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "CREAM")
     recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "MOSITURIZER")
     recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "SUNSCREEN")
-
+    global recommanded_name_gl
+    recommanded_name_gl = recommanded_name
     cosmetics = getCosmeticsWithFav()
     recommanded_cos = []
     n = len(cosmetics)
@@ -260,7 +263,7 @@ def map():
         list_item = [int(tmp["id"]), tmp["name"], tmp["wedo"], tmp["kyungdo"], tmp["address"]]
         locations.append(list_item)
 
-    return render_template('map.html', data=data, locations=locations)
+    return render_template('map.html', data=data, locations=locations, rec_name = recommanded_name_gl)
 
 @app.route('/userdata')
 def userdata():
