@@ -5,7 +5,6 @@ var list = [[1, "cosmetic 1", 11037, 3.4, null, true],
       */
 
 //modify
-var user_id = 1;
 function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
   imgNo = (NO%5)+1;
   var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a class="rate" id="cosmetic'+NO+'"><img src="/static/images/'+imgNo+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
