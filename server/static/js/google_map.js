@@ -153,7 +153,7 @@ function setModalData(NO){
       $('.modal-content').prepend('<br><h2 style="text-align: center">Stock in '+locations[i][1]+'</h2>');
 
       for(var j=1; j<data[i].length; j++){
-        var template='<tr><th scope="row">'+j+'</th><td>'+data[i][j][0]+'</td><td>'+data[i][j][1]+'</td></tr>';
+        var template='<tr><th scope="row">'+j+'</th><td style="background-color:#c0cee2">'+data[i][j][0]+'</td><td>'+data[i][j][1]+'</td></tr>';
         $('[name="table_data"]').append(template);
       }
 
