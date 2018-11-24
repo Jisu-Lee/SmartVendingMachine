@@ -146,14 +146,22 @@ function getNearestMachine(lat, lng, locations){
 }
 
 function setModalData(NO){
+  $('[name="table_data"]').empty();
+
   for(var i=0; i<data.length; i++){
     if(data[i][0] == NO){
-      var template = '<p id="modal_data">'+NO+': '+locations[i][1]+'<br>'+data[i]+'</p>';
+      $('.modal-content').prepend('<br><h2 style="text-align: center">Stock in '+locations[i][1]+'</h2>');
+
+      for(var j=1; j<data[i].length; j++){
+        var template='<tr><th scope="row">'+j+'</th><td>'+data[i][j][0]+'</td><td>'+data[i][j][1]+'</td></tr>';
+        $('[name="table_data"]').append(template);
+      }
+
     }
   }
 
 
-  $(".modal-content").append(template);
+
 }
 
 
