@@ -81,9 +81,11 @@ infoWindow = new google.maps.InfoWindow;
         }
        google.maps.event.addListener(marker, 'click', (function(marker, i) {
          return function() {
+           console.log(locations[i][0])
+           idx = locations[i][0]
            infowindow.setContent(locations[i][1]);
            infowindow.open(map, marker);
-           setModalData(i+1);
+           setModalData(idx);
            var modal = document.getElementById('myModal');
            // Get the <span> element that closes the modal
            var span = document.getElementsByClassName("close")[0];
@@ -146,16 +148,25 @@ function getNearestMachine(lat, lng, locations){
   return min_index;
 }
 
-function setModalData(NO){
+function setModalData(idx){
   $('[name="table_data"]').empty();
+  $('.location').remove();
 
   for(var i=0; i<data.length; i++){
-    if(data[i][0] == NO){
-      $('.modal-content').prepend('<br><h2 style="text-align: center">Stock in '+locations[i][1]+'</h2>');
+    if(data[i][0] == idx){
+      $('.modal-content').prepend('<br class="location"><h2 class="location" style="text-align: center">Stock in '+locations[i][1]+'</h2>');
 
       for(var j=1; j<data[i].length; j++){
-        var template='<tr><th scope="row">'+j+'</th><td style="background-color:#c0cee2">'+data[i][j][0]+'</td><td>'+data[i][j][1]+'</td></tr>';
+        var template='<tr id="'+j+'"><th scope="row">'+j+'</th><td>'+data[i][j][0]+'</td><td>'+data[i][j][1]+'</td></tr>';
         $('[name="table_data"]').append(template);
+
+        for(var k=0; k<rec_name.length; k++){
+            if(rec_name[k] == data[i][j][0]){
+              $('#'+j).css("background-color", "#c0cee2");
+
+            }
+        }
+
       }
 
     }
@@ -170,6 +181,7 @@ $(document).ready(function(e) {
     //initMap();
     //multiple location
 
+console.log(locations);
 
     addLocation(latitude, longitude);
     addLocationData(locations);
