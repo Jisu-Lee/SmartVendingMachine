@@ -1,4 +1,7 @@
-
+/*users = [ {birthyear:"", gender:"", id:"", name:"", pw:"", skintype:"", user_id:""},
+            {.....}
+            ]
+*/
 $(document).ready(function() {
     "use strict";
 
@@ -55,6 +58,13 @@ $(document).ready(function() {
         $(thisAlert).removeClass('alert-validate');
     }
 
+    function sleep(miliseconds) {
+       var currentTime = new Date().getTime();
+
+       while (currentTime + miliseconds >= new Date().getTime()) {
+       }
+    }
+
     function sendDataAJAX(input) {
 
         var myObj = new Object();
@@ -65,13 +75,17 @@ $(document).ready(function() {
         var jsonText =  JSON.stringify(myObj);
         console.log(jsonText);
         $.ajax({
-                url: '/login',
+                url: '/getlogin',
                 data: jsonText,
                 type: 'POST',
                 dataType: "json",
                 contentType: 'application/json;charset=UTF-8',
                 success: function(response) {
-                    console.log(response);
+                    if(response["status"] == "ok"){
+                        window.location.href='http://127.0.0.1:8080/list';
+                    }else{
+                        window.location.href='http://127.0.0.1:8080/login'
+                    }
                 },
                 error: function(error) {
                     console.log(error);

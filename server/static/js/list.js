@@ -5,7 +5,6 @@ var list = [[1, "cosmetic 1", 11037, 3.4, null, true],
       */
 
 //modify
-var user_id = 1;
 function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
   imgNo = (Math.floor(Math.random() * 10)) % 3 + 1;
   console.log(type+"_"+imgNo);
