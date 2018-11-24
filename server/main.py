@@ -73,7 +73,7 @@ def getlist():
         elif(ptype == "CREAM"):
             cosList[i][4] = "lotion"
 
-    return render_template('list.html', cosList=cosList, userPick=userPick)
+    return render_template('list.html', cosList=cosList)
 
 '''
 add: {"data":[user, cos, rating]}
