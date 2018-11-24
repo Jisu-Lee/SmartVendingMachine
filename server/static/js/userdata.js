@@ -19,7 +19,8 @@ function addUserData(name, birthYear, skinType, gender){
   $(".form-group").append(gender);
 };
 
+//user=[{"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"}]
 $(document).ready(function() {
-addUserData("Jang Woosoon", 2001, "sensitive", "male");
+addUserData(user[0]["name"], user[0]["birthyear"], user[0]["skintype"], user[0]["gender"]);
 
 });

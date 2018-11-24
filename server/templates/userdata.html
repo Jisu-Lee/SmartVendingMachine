@@ -75,7 +75,7 @@
 			<!-- 여기에 기존 코드 -->
 			<nav id="fh5co-main-menu" role="navigation">
 				<ul>
-					<li><a href="{{ url_for('list') }}">List</a></li>
+					<li><a href="{{ url_for('getlist') }}">List</a></li>
 					<li><a href="{{ url_for('favorite') }}">Favorite</a></li>
 					<li><a href="{{ url_for('recommand') }}">Recommand</a></li>
 					<li><a href="{{ url_for('map') }}">Nearest Vending Machine</a></li>
@@ -139,6 +139,7 @@
 
 	<!-- MAIN JS -->
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/userdata.js') }}"></script>
 
 	</body>
 </html>

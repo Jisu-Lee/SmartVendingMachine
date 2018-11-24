@@ -158,7 +158,7 @@ def predict(User_id, Cos_id, w_matrix, adjusted_ratings, rating_mean):
 
     return predicted_rating
 
-# evaluate the learned recommender system on test data by converting the ratings to negative and positive
+# evaluate the learned recommander system on test data by converting the ratings to negative and positive
 def binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean):
     # predict all the ratings for test data
     ratings_test = ratings_test.assign(predicted_rating = pd.Series(np.zeros(ratings_test.shape[0])))
@@ -174,8 +174,8 @@ def binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean):
     recall = tp/(tp+fn)
     return (precision, recall)
 
-# make recommendations with content-based
-def recommendCB(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
+# make recommandations with content-based
+def recommandCB(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
     distinct_cosmetics = np.unique(adjusted_ratings['Cos_id'])
     user_ratings_all_cosmetics = pd.DataFrame(columns=['Cos_id', 'rating'])
     user_rating = adjusted_ratings[adjusted_ratings['User_id']==userID]
@@ -193,10 +193,11 @@ def recommendCB(userID, w_matrix, adjusted_ratings, rating_mean, amount=10):
         i = i + 1
 
     # select top 10 cosmetics rated by the user
-    recommendations = user_ratings_all_cosmetics.sort_values(by=['rating'], ascending=False).head(amount)
-    return recommendations
+    recommandations = user_ratings_all_cosmetics.sort_values(by=['rating'], ascending=False).head(amount)
+    return recommandations
 
-def recommend_hybrid(user_id, similar_user_num, content_num, dataset):
+def recommand_hybrid(user_id, similar_user_num, content_num, dataset):
+    user_id = int(user_id)
     similar_user = most_similar_users(user_id, similar_user_num, dataset['ub_dataset'])
     
     cb_dataset = dataset['cb_dataset']
@@ -218,19 +219,17 @@ def recommend_hybrid(user_id, similar_user_num, content_num, dataset):
     eval_result = binary_eval(ratings_test, w_matrix, adjusted_ratings, rating_mean)
     print('Evaluation result - precision: %f, recall: %f' % eval_result)
 
-    # get a recommendation list for a given user
-    recommended_cosmetics = recommendCB(2, w_matrix, adjusted_ratings, rating_mean)
-    return recommended_cosmetics[0:content_num]
+    # get a recommandation list for a given user
+    recommanded_cosmetics = recommandCB(2, w_matrix, adjusted_ratings, rating_mean)
+    return recommanded_cosmetics[0:content_num]
 
-def change_id_to_name(cosmetic_name, cosmetic_cid, recommended_item):
-    recommended_cid = recommended_item['Cos_id']
+def change_id_to_name(cosmetic_name, cosmetic_cid, selected_id_list):
+    recommanded_name = []
+    for cos_id in selected_id_list:
+        recommanded_name.append(cosmetic_name[cosmetic_cid.index(cos_id)])
+    return recommanded_name
 
-    recommended_name = []
-    for cos_id in recommended_cid:
-        recommended_name.append(cosmetic_name[cosmetic_cid.index(cos_id)])
-    return recommended_name
-
-def define_lisset(similarCos, similarUser, allRating):
+def define_listset(similarUser, similarCos, allRating):
 	uid_list = []
 	cid_list = []
 	cname_list = []

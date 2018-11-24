@@ -12,7 +12,7 @@
  };
 
 $(document).ready(function(){
-	for(var i=0; i<10; i++){
+	for(var i=0; i<fav_list.length; i++){
 		ptype = (fav_list[i]["product_type"]).toUpperCase();
 		if(ptype == "SUNSCREEN"){
 			fav_list[i]["product_type"] = "sunblock";
@@ -22,6 +22,6 @@ $(document).ready(function(){
 		}else if(ptype == "CREAM"){
 			fav_list[i]["product_type"] = "lotion";
 		}
-	addDynamicCosmetic(i+1, fav_list[i]["name"], fav_list[i]["price"], fav_list[i]["rating"], fav_list[i]["product_type"], true)
+	addDynamicCosmetic(i+1, fav_list[i]["name"], fav_list[i]["price"], fav_list[i]["rating"], fav_list[i]["product_type"], fav_list[i]["fav_flag"])
 	}
 });
