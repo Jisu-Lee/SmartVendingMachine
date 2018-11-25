@@ -143,9 +143,16 @@ def setNewStockFile():
 				write_file(cos_oily_cre, cos_oily_moi, cos_oily_sun, i, oFile, 2)
 			elif i == 5:
 				write_file(cos_sen_cre, cos_sen_moi, cos_sen_sun, i, oFile, 1)
-			elif i == 6:
+			elif i == 6	:
 				write_file(cos_sen_cre, cos_sen_moi, cos_sen_sun, i, oFile, 2)
-	
+			elif i == 7 :
+				write_file(cos_dry_cre, cos_dry_moi, cos_dry_sun, i, oFile, 1)
+			elif i == 8:
+				write_file(cos_dry_cre, cos_dry_moi, cos_dry_sun, i, oFile, 2)
+			elif i == 9:
+				write_file(cos_oily_cre, cos_oily_moi, cos_oily_sun, i, oFile, 1)
+			elif i == 10:
+				write_file(cos_oily_cre, cos_oily_moi, cos_oily_sun, i, oFile, 2)
 	pinputFile.close()
 	outputFile.close()
 
@@ -157,18 +164,36 @@ def write_file(cos_cre, cos_moi, cos_sun, i, file, pos):
 		num = j 
 		if pos == 2:
 			num = num + int(round(length/2,0))
+
 		if(num < len(cos_cre)):
 			file.writerow([i,cos_cre[num][0],round(uniform(3,15),0)])
 		else:
-			file.writerow([i,cos_cre[num-len(cos_cre)][0],round(uniform(3,15),0)])
+			num = num-len(cos_cre)
+			if(num-len(cos_cre) > len(cos_cre)):
+				num = num - len(cos_cre)
+			if(num < 0):
+				num = j
+			file.writerow([i,cos_cre[num][0],round(uniform(3,15),0)])
+
 		if(num < len(cos_moi)):
 			file.writerow([i,cos_moi[num][0],round(uniform(3,15),0)])
 		else:
-			file.writerow([i,cos_moi[num-len(cos_moi)][0],round(uniform(3,15),0)])
+			num = num-len(cos_moi)
+			if(num-len(cos_moi) > len(cos_moi)):
+				num = num - len(cos_moi)
+			if(num < 0):
+				num = j	
+			file.writerow([i,cos_moi[num][0],round(uniform(3,15),0)])
+		
 		if(num < len(cos_sun)):
 			file.writerow([i,cos_sun[num][0],round(uniform(3,15),0)])
 		else:
-			file.writerow([i,cos_sun[num-len(cos_sun)][0],round(uniform(3,15),0)])
+			num = num-len(cos_sun)
+			if(num-len(cos_sun) > len(cos_sun)):
+				num = num - len(cos_sun)
+			if(num < 0):
+				num = j	
+			file.writerow([i,cos_sun[num][0],round(uniform(3,15),0)])
 
 def find_highest(one, two, three):
 	answer = one
