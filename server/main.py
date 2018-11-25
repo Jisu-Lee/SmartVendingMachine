@@ -16,6 +16,7 @@ import logging
 import socket
 import logging
 import algo
+import json
 
 # related to recommandation algorithm
 from operator import itemgetter
@@ -31,9 +32,11 @@ from flask import Flask, request, redirect, url_for, render_template
 from google.cloud import datastore
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 user_id = 1
 userInfo = [{"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"}]
+recommanded_name_gl = ['Nail File', 'EXTRA Soothing Balm', 'EXTRA Balm Rinse', 'No Smudge Mascara', 'Hydrating Face Tonic', 'Pot Rouge for Lips \\u0026 Cheeks', 'Eye Paint Eye Shadow', 'Soothing Cleansing Oil', 'Body Pigment Powder Pearl']
 
 def getCosmeticsWithFav():
     ds = datastore.Client()
@@ -61,7 +64,7 @@ def getUsers():
     entity = query.fetch()
     return list(entity)
 
-def allRatings():
+def getRatings():
     ds = datastore.Client()
     query = ds.query(kind='favorite')
     entity = query.fetch()
@@ -115,6 +118,7 @@ remove: {"data":[user, cos, -1]}
 @app.route('/updatefav', methods=['GET','POST'])
 def updatefav():
     print(request.json)
+    ds = datastore.Client()
     if request.json:
         data = request.json
         uid = data["data"][0]
@@ -123,7 +127,7 @@ def updatefav():
         print(uid, ",", cid, ",", rating)
         ratings = getRatings()
         if(rating >= 0):
-            datastore.Entity(key=ds.key('favorite'))
+            entity = datastore.Entity(key=ds.key('favorite'))
             entity.update({
                 'cosmetic_id': cid,
                 'user_id': uid,
@@ -136,7 +140,7 @@ def updatefav():
             query.add_fileter('user_id', '=', uid)
             query.add_fileter('rating', '=', rating)
             entity = query.fetch()
-            client.delete(entity.key)
+            ds.delete(entity.key)
         return json.dumps({'status':'ok'})
     return json.dumps({'status':'fail'})
 
@@ -171,7 +175,8 @@ def recommand():
     recommanded_name = recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "CREAM")
     recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "MOSITURIZER")
     recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "SUNSCREEN")
-
+    global recommanded_name_gl
+    recommanded_name_gl = recommanded_name
     cosmetics = getCosmeticsWithFav()
     recommanded_cos = []
     n = len(cosmetics)
@@ -260,7 +265,7 @@ def map():
         list_item = [int(tmp["id"]), tmp["name"], tmp["wedo"], tmp["kyungdo"], tmp["address"]]
         locations.append(list_item)
 
-    return render_template('map.html', data=data, locations=locations)
+    return render_template('map.html', data=data, locations=locations, rec_name = recommanded_name_gl)
 
 @app.route('/userdata')
 def userdata():
