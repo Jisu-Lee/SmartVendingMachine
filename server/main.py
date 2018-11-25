@@ -79,13 +79,13 @@ def login():
 def getlogin():
     if(request.json):
         data = request.json
-        uid = data["data"][0]
+        uname = data["data"][0]
         upw = data["data"][1]
         users = getUsers()
         for user in users:
-            if(user["id"] == uid and user["pw"] ==  upw):
+            if(user["name"] == uname and user["pw"] ==  upw):
                 global user_id
-                user_id = uid
+                user_id = user['id']
                 global userInfo
                 userInfo = []
                 userInfo.append(user)
@@ -125,20 +125,19 @@ def updatefav():
         cid = data["data"][1]
         rating = float(data["data"][2])
         print(uid, ",", cid, ",", rating)
-        ratings = getRatings()
         if(rating >= 0):
             entity = datastore.Entity(key=ds.key('favorite'))
             entity.update({
-                'cosmetic_id': cid,
-                'user_id': uid,
+                'cosmetic_id': str(cid),
+                'user_id': str(uid),
                 'rating': str(rating)
                 })
             ds.put(entity)
         else:
             query = ds.query(kind='favorite')
-            query.add_filter('cosmetic_id', '=', uid)
-            query.add_fileter('user_id', '=', uid)
-            query.add_fileter('rating', '=', rating)
+            query.add_filter('cosmetic_id', '=', str(uid))
+            query.add_fileter('user_id', '=', str(uid))
+            query.add_fileter('rating', '=', str(rating))
             entity = query.fetch()
             ds.delete(entity.key)
         return json.dumps({'status':'ok'})
