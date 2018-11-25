@@ -165,7 +165,7 @@ var list = [[1, "cosmetic 1", 11037, 3.4, null, true],
       [2, "cosmetic 2", 11037, 3.4, null,  false],
       [3, "cosmetic 3", 11037, 3.4, null,  true]];
       */
-for(var i=0; i<list.length; i++){
-	addDynamicCosmetic(i+1, list[i][1], list[i][2], list[i][3], list[i][4], list[i][5]);
+for(var i=1; i<list.length+1; i++){
+	addDynamicCosmetic(i, list[i][1], list[i][2], list[i][3], list[i][4], list[i][5]);
 }
 });
