@@ -273,8 +273,8 @@ body.offcanvas #fh5co-main, body.offcanvas .fh5co-nav-toggle {
 }
 
 .work-item {
-  height: 40vh;
-	width: 20vw;
+  height: 20vw;
+  width: 20vw;
 }
 .work-item a {
   border: none;
