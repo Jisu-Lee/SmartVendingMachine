@@ -6,7 +6,7 @@
 
    $("#"+type).append(template);
    $("#home").append(template);
-   if(fav_flag == true){
+   if(fav_flag == "true"){
      $('.fa-star').css("color","orange");
 }
  };
