@@ -48,7 +48,7 @@ def getRatings():
 
 user_id = 1
 userInfo = [{"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"}]
-recommanded_name_gl=["Tweezer", "Eye Paint Eye Shadow"]
+recommanded_name_gl=["Tweezer", "Eye Paint Eye Shadow", "Crystal Lip Gloss", "Rock Off Glycolic Callus Peel"]
 
 @app.route('/')
 @app.route('/login')
