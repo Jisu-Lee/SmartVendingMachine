@@ -21,7 +21,7 @@ $(document).ready(function() {
 		}else if(ptype == "CREAM"){
 			recommanded_cos[i]["product_type"] = "lotion";
 		}
-	addDynamicCosmetic(i+1, recommanded_cos[i]["name"], recommanded_cos[i]["price"], recommanded_cos[i]["rating"], recommanded_cos[i]["product_type"], recommanded_cos[i]["fav_flag"]);
+	addDynamicCosmetic(recommanded_cos[i][0], recommanded_cos[i]["name"], recommanded_cos[i]["price"], recommanded_cos[i]["rating"], recommanded_cos[i]["product_type"], recommanded_cos[i]["fav_flag"]);
 	}
 
 });

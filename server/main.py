@@ -42,7 +42,7 @@ def getCosmeticsWithFav():
     ds = datastore.Client()
     query = ds.query(kind='cosmetics')
     entity = query.fetch()
-    cosmetics = list(entity)    
+    cosmetics = list(entity)
 
     query = ds.query(kind='favorite')
     query.add_filter('user_id', '=', str(user_id))
@@ -56,7 +56,7 @@ def getCosmeticsWithFav():
             for j in range(len(cosmetics)):
                 if(cosmetics[j]['id'] == userPick[i]['cosmetic_id']):
                     cosmetics[j].update({'fav_flag':'true'})
-    return cosmetics                    
+    return cosmetics
 
 def getUsers():
     ds = datastore.Client()
@@ -92,7 +92,7 @@ def getlogin():
                 return json.dumps({'status':'ok'})
     return json.dumps({'status':'fail'})
 
-@app.route('/list') 
+@app.route('/list')
 def getlist():
     cosmetics = getCosmeticsWithFav()
     cosList = []
@@ -143,7 +143,7 @@ def updatefav():
         return json.dumps({'status':'ok'})
     return json.dumps({'status':'fail'})
 
-# local debugging    
+# local debugging
 @app.route('/recommand')
 def recommand():
     ds = datastore.Client()
@@ -169,8 +169,8 @@ def recommand():
     allRating = list(entity)
 
     recommanded_name = ["a", "b", "c"]
-    
-    
+
+
     recommanded_name = recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "CREAM")
     recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "MOSITURIZER")
     recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "SUNSCREEN")
@@ -187,7 +187,7 @@ def recommand():
 
     return render_template('recommand.html', recommanded_cos=recommanded_cos, similarCos=similarCos, similarUser=similarUser, allRating=allRating)
 
-def recommand_product_type(user_id, similar_user_num, content_num, similarUser, similarCos, allRating, product_type):   
+def recommand_product_type(user_id, similar_user_num, content_num, similarUser, similarCos, allRating, product_type):
     similarCos = clustered_by_product_type(similarCos, product_type)
     list_dataset = algo.define_listset(similarUser, similarCos, allRating)
     dataset = algo.define_dataset(list_dataset["uid_list"], list_dataset["cid_list"], list_dataset["rating_uid_list"], list_dataset["rating_cid_list"], list_dataset["rating_score_list"])
@@ -213,12 +213,12 @@ def recommand_product_type(user_id, similar_user_num, content_num, similarUser, 
 
 def clustered_by_product_type(dataset, product_type):
     clustered_dataset = []
-    
+
     for data in dataset:
         if(data["product_type"] == product_type):
             clustered_dataset.append(data)
-    
-    return clustered_dataset                
+
+    return clustered_dataset
 
 @app.route('/favorite')
 def favorite():
@@ -303,7 +303,7 @@ def data():
     sinputFile.close()
     return "done"
     # reading cosmetic csv
-    
+
     cinputFile = open('newproducts.csv','r',encoding='"UTF-8"')
     cFile = csv.reader(cinputFile)
     for i,line in enumerate(cFile):
@@ -348,7 +348,7 @@ def data():
             })
             ds.put(entity)
     sinputFile.close()
-    
+
     # reading vending csv
     vinputFile = open('newvendings.csv','r',encoding='"UTF-8"')
     vFile = csv.reader(vinputFile)
