@@ -30,6 +30,7 @@ from flask import Flask, request, redirect, url_for, render_template
 from google.cloud import datastore
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 user_id = 1
 userInfo = [{"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"}]

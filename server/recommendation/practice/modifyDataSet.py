@@ -88,24 +88,96 @@ def setNewUserFile():
 	outputFile.close()
 
 def setNewStockFile():
-	outputFile = open('newstock.csv','w',encoding='"UTF-8"',newline='')
+	pinputFile = open('re_small_products.csv','r',encoding='"UTF-8"')
+	iFile = csv.reader(pinputFile)
+	outputFile = open('re_newstock.csv','w',encoding='"UTF-8"',newline='')
 	oFile = csv.writer(outputFile)
+	
+	cos_dry_cre = []
+	cos_dry_moi = []
+	cos_dry_sun = []
+	cos_oily_cre = []
+	cos_oily_moi = []
+	cos_oily_sun = []
+	cos_sen_cre = []
+	cos_sen_moi = []
+	cos_sen_sun = []
+
+	for i, line in enumerate(iFile):	
+		if line[3] == "dry":
+			if line[2] == "CREAM":
+				cos_dry_cre.append(line)
+			elif line[2] == "MOSITURIZER":
+				cos_dry_moi.append(line)
+			elif line[2] == "SUNSCREEN":
+				cos_dry_sun.append(line)
+		elif line[3] == "oily":
+			if line[2] == "CREAM":
+				cos_oily_cre.append(line)
+			elif line[2] == "MOSITURIZER":
+				cos_oily_moi.append(line)
+			elif line[2] == "SUNSCREEN":
+				cos_oily_sun.append(line)
+		elif line[3] == "sensitive":
+			if line[2] == "CREAM":
+				cos_sen_cre.append(line)
+			elif line[2] == "MOSITURIZER":
+				cos_sen_moi.append(line)
+			elif line[2] == "SUNSCREEN":
+				cos_sen_sun.append(line)
+		else:
+			print("error")
+	
 	for i in range(11):
 		if i == 0:
 			outputFileList = ['vending_id','cosmetic_id','stock']
 			oFile.writerow(outputFileList)
 		else:
-			stock = {}
-			for j in range(30):
-				rnum = randint(1,120)
-				if rnum not in stock:
-					snum = round(uniform(0,15),0)
-					stock[rnum] = snum
-					oFile.writerow([i,rnum,snum])
-				else:
-					j = j - 1
+			if i == 1:
+				write_file(cos_dry_cre, cos_dry_moi, cos_dry_sun, i, oFile, 1)
+			elif i == 2:
+				write_file(cos_dry_cre, cos_dry_moi, cos_dry_sun, i, oFile, 2)
+			elif i == 3:
+				write_file(cos_oily_cre, cos_oily_moi, cos_oily_sun, i, oFile, 1)
+			elif i == 4:
+				write_file(cos_oily_cre, cos_oily_moi, cos_oily_sun, i, oFile, 2)
+			elif i == 5:
+				write_file(cos_sen_cre, cos_sen_moi, cos_sen_sun, i, oFile, 1)
+			elif i == 6:
+				write_file(cos_sen_cre, cos_sen_moi, cos_sen_sun, i, oFile, 2)
+	
+	pinputFile.close()
 	outputFile.close()
-					
+
+def write_file(cos_cre, cos_moi, cos_sun, i, file, pos):
+	length = find_highest(len(cos_cre), len(cos_moi), len(cos_sun))
+	print("len : ", len(cos_cre),len(cos_moi),len(cos_cre))
+	print(length)
+	for j in range(int(round(length/2,0))):
+		num = j 
+		if pos == 2:
+			num = num + int(round(length/2,0))
+		if(num < len(cos_cre)):
+			file.writerow([i,cos_cre[num][0],round(uniform(3,15),0)])
+		else:
+			file.writerow([i,cos_cre[num-len(cos_cre)][0],round(uniform(3,15),0)])
+		if(num < len(cos_moi)):
+			file.writerow([i,cos_moi[num][0],round(uniform(3,15),0)])
+		else:
+			file.writerow([i,cos_moi[num-len(cos_moi)][0],round(uniform(3,15),0)])
+		if(num < len(cos_sun)):
+			file.writerow([i,cos_sun[num][0],round(uniform(3,15),0)])
+		else:
+			file.writerow([i,cos_sun[num-len(cos_sun)][0],round(uniform(3,15),0)])
+
+def find_highest(one, two, three):
+	answer = one
+	if two > answer:
+		answer = two
+	if three > answer:
+		answer = three
+	return answer
+
 def modifyProductFile():
 	pinputFile = open('newvendings.csv','r',encoding='"UTF-8"', errors='ignore')
 	pFile = csv.reader(pinputFile)
@@ -142,4 +214,4 @@ def setRenameProductFile():
 	outputFile.close()				
 
 
-setRenameProductFile()
+setNewStockFile()
