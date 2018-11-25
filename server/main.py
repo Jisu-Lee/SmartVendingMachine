@@ -97,7 +97,7 @@ def getlist():
     cosmetics = getCosmeticsWithFav()
     cosList = []
     for tmp in cosmetics:
-        list_item = [int(tmp["id"]), tmp["name"], float(tmp["price"]), float(tmp["rating"]), tmp["product_type"], tmp["fav_flag"]]
+        list_item = [int(tmp["id"]), tmp["name"], float(tmp["price"]), float(tmp["rating"]), tmp["product_type"],tmp["skintype"], tmp["fav_flag"]]
         cosList.append(list_item)
 
     for i in range(len(cosList)):
