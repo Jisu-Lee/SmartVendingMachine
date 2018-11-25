@@ -11,11 +11,12 @@ function addDynamicCosmetic(NO, name, price, score, type, skin_type, fav_flag){
   //if(name.length > 29)
   var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a class="rate" id="cosmetic'+NO+'"><img src="/static/images/'+type+"_"+imgNo+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
   $("#"+type).append(template);
+  if(fav_flag == "true"){
+    $('#cos'+NO).css("color", "orange");
+  }
   $("#home").append(template);
 //console.log("hh"+fav_flag);
   if(fav_flag == "true"){
-
-
     $('#cos'+NO).css("color", "orange");
   }
 };
