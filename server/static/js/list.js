@@ -6,10 +6,15 @@ var list = [[1, "cosmetic 1", 11037, 3.4, null, true],
 
 //modify
 function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
-  imgNo = (NO%5)+1;
-  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a class="rate" id="cosmetic'+NO+'"><img src="/static/images/'+imgNo+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
+  imgNo = (Math.floor(Math.random() * 10)) % 3 + 1;
+
+  //if(name.length > 29)
+  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a class="rate" id="cosmetic'+NO+'"><img src="/static/images/'+type+"_"+imgNo+'.jpg") }}" alt="cosmetic img" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
   $(".data").append(template);
-  if(fav_flag == true){
+
+  if(fav_flag == "true"){
+    console.log(fav_flag);
+
     $('#cos'+NO).css("color", "orange");
   }
 };
@@ -35,7 +40,8 @@ $(document).ready(function() {
                               cosmetic_id = parseInt(cosmetic_id.replace("cos", ""));
                               var myObj = new Object();
 
-                              alert(user_id+"/"+cosmetic_id+"/-1");
+                              //alert(user_id+"/"+cosmetic_id+"/-1");
+                              //alert("favorite cancel");
 
                               var rate_data = [user_id, cosmetic_id, -1];  //id = userID, data = cosmeticID
                               myObj.data = rate_data;
@@ -49,11 +55,14 @@ $(document).ready(function() {
                                                   contentType: 'application/json;charset=UTF-8',
                                                   success: function(response) {
                                                       console.log(response);
-                                                      $('#'+cosmetic_id).css("color", "gray");
+                                                      if(reponse["status"] == "ok"){
+	                                                    $('#'+cosmetic_id).css("color", "gray");
+	                                                    window.location.href='https://wannagraduate-220706.appspot.com/list'
+                                                      }
 
                                                   },
                                                   error: function(error) {
-                                                      console.log(error);
+                                                      console.log("error");
                                                   }
                                               });
 
@@ -87,11 +96,11 @@ $(document).ready(function() {
 
 
                     console.log(cosmetic_id);
-                    var rate_score = this.value;
+                    var rate_score = parseInt(this.value);
                     cosmetic_id = parseInt(cosmetic_id.replace("cos", ""));
                     var myObj = new Object();
 
-                    alert(user_id+"/"+cosmetic_id+"/"+rate_score);
+                    //alert("rate: "+rate_score);
 
                     var rate_data = [user_id, cosmetic_id, rate_score];  //id = userID, data = cosmeticID
                     myObj.data = rate_data;
@@ -105,11 +114,15 @@ $(document).ready(function() {
                                         contentType: 'application/json;charset=UTF-8',
                                         success: function(response) {
                                             console.log(response);
-                                            $('#'+cosmetic_id).css("color", "orange");
-
+                                        	if(response["status"] == "ok"){
+                                            	
+                                            	$('#'+cosmetic_id).css("color", "orange");
+                                            	alert("debug");
+                                        	window.location.href='https://wannagraduate-220706.appspot.com/list';
+                                        }
                                         },
                                         error: function(error) {
-                                            console.log(error);
+                                            console.log("error");
                                         }
                                     });
 

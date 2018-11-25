@@ -98,9 +98,8 @@
 		<div id="fh5co-main">
 			<script>
 				var data = JSON.parse('{{ data | tojson | safe }}');
-				var data2 = ('{{data}}');
 				var locations = JSON.parse('{{ locations | tojson | safe }}');
-				var locations2 = ('{{locations}}')
+				var rec_name = JSON.parse('{{ rec_name | tojson | safe }}');
 			</script>
 
 			<div id="map"></div>
@@ -109,6 +108,19 @@
 
 			  <div class="modal-content">
 			    <span class="close">&times;</span>
+
+					<table class="table">
+					  <thead class="thead-light">
+					    <tr>
+					      <th scope="col">#</th>
+					      <th scope="col">Cosmetic Name</th>
+					      <th scope="col">Stock</th>
+					    </tr>
+					  </thead>
+					  <tbody name="table_data">
+					    
+					  </tbody>
+					</table>
 
 			  </div>
 

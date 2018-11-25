@@ -18,6 +18,7 @@ import logging
 import algo
 
 # related to recommandation algorithm
+from operator import itemgetter
 import csv
 import pandas as pd
 import numpy as np
@@ -34,6 +35,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 user_id = 1
 userInfo = [{"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"}]
+recommanded_name_gl = ['Nail File', 'EXTRA Soothing Balm', 'EXTRA Balm Rinse', 'No Smudge Mascara', 'Hydrating Face Tonic', 'Pot Rouge for Lips \\u0026 Cheeks', 'Eye Paint Eye Shadow', 'Soothing Cleansing Oil', 'Body Pigment Powder Pearl']
 
 def getCosmeticsWithFav():
     ds = datastore.Client()
@@ -61,6 +63,14 @@ def getUsers():
     entity = query.fetch()
     return list(entity)
 
+def allRatings():
+    ds = datastore.Client()
+    query = ds.query(kind='favorite')
+    entity = query.fetch()
+    return list(entity)
+
+
+
 @app.route('/')
 @app.route('/login')
 def login():
@@ -84,7 +94,6 @@ def getlogin():
     return json.dumps({'status':'fail'})
 
 @app.route('/list') 
-@app.route('/')
 def getlist():
     cosmetics = getCosmeticsWithFav()
     cosList = []
@@ -110,16 +119,30 @@ remove: {"data":[user, cos, -1]}
 @app.route('/updatefav', methods=['GET','POST'])
 def updatefav():
     print(request.json)
-
     if request.json:
         data = request.json
         uid = data["data"][0]
         cid = data["data"][1]
-        rating = data["data"][2]
+        rating = float(data["data"][2])
         print(uid, ",", cid, ",", rating)
-#favorite table
-    
-    return redirect(url_for('getlist'))
+        ratings = getRatings()
+        if(rating >= 0):
+            datastore.Entity(key=ds.key('favorite'))
+            entity.update({
+                'cosmetic_id': cid,
+                'user_id': uid,
+                'rating': str(rating)
+                })
+            ds.put(entity)
+        else:
+            query = ds.query(kind='favorite')
+            query.add_filter('cosmetic_id', '=', uid)
+            query.add_fileter('user_id', '=', uid)
+            query.add_fileter('rating', '=', rating)
+            entity = query.fetch()
+            client.delete(entity.key)
+        return json.dumps({'status':'ok'})
+    return json.dumps({'status':'fail'})
 
 # local debugging    
 @app.route('/recommand')
@@ -147,18 +170,13 @@ def recommand():
     allRating = list(entity)
 
     recommanded_name = ["a", "b", "c"]
-    list_dataset = algo.define_listset(similarUser, similarCos, allRating)
-    dataset = algo.define_dataset(list_dataset["uid_list"], list_dataset["cid_list"], list_dataset["rating_uid_list"], list_dataset["rating_cid_list"], list_dataset["rating_score_list"])
-
-    while True:
-        try:
-            recommanded_id = algo.recommand_hybrid(user_id,10,3,dataset)
-            break
-        except ZeroDivisionError:
-            logging.info("Oops!  That was no valid number.  Try again...")
-
-    recommanded_name = algo.change_id_to_name(list_dataset["cname_list"], list_dataset["cid_list"], recommanded_id["Cos_id"])
     
+    
+    recommanded_name = recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "CREAM")
+    recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "MOSITURIZER")
+    recommanded_name = recommanded_name + recommand_product_type(user_id, 10, 3, similarUser, similarCos, allRating, "SUNSCREEN")
+    global recommanded_name_gl
+    recommanded_name_gl = recommanded_name
     cosmetics = getCosmeticsWithFav()
     recommanded_cos = []
     n = len(cosmetics)
@@ -169,7 +187,39 @@ def recommand():
                 break
 
     return render_template('recommand.html', recommanded_cos=recommanded_cos, similarCos=similarCos, similarUser=similarUser, allRating=allRating)
-                
+
+def recommand_product_type(user_id, similar_user_num, content_num, similarUser, similarCos, allRating, product_type):   
+    similarCos = clustered_by_product_type(similarCos, product_type)
+    list_dataset = algo.define_listset(similarUser, similarCos, allRating)
+    dataset = algo.define_dataset(list_dataset["uid_list"], list_dataset["cid_list"], list_dataset["rating_uid_list"], list_dataset["rating_cid_list"], list_dataset["rating_score_list"])
+
+    recommanded_id = {}
+    while True:
+        try:
+            recommanded_id = algo.recommand_hybrid(user_id,similar_user_num,content_num,dataset)
+            break
+        except ZeroDivisionError:
+            logging.info("Oops!  That was no valid number.  Try again...")
+        except algo.NoDataError:
+            sorted_similarCos = sorted(similarCos, key=itemgetter('rating'), reverse = True)
+            recommanded_id_list = []
+            for i, cosmetic in enumerate(sorted_similarCos):
+                if(i<content_num):
+                    recommanded_id_list.append(int(cosmetic["id"]))
+                else:
+                    break
+            recommanded_id = {"Cos_id" : recommanded_id_list}
+            break
+    return algo.change_id_to_name(list_dataset["cname_list"], list_dataset["cid_list"], recommanded_id["Cos_id"])
+
+def clustered_by_product_type(dataset, product_type):
+    clustered_dataset = []
+    
+    for data in dataset:
+        if(data["product_type"] == product_type):
+            clustered_dataset.append(data)
+    
+    return clustered_dataset                
 
 @app.route('/favorite')
 def favorite():
@@ -215,7 +265,7 @@ def map():
         list_item = [int(tmp["id"]), tmp["name"], tmp["wedo"], tmp["kyungdo"], tmp["address"]]
         locations.append(list_item)
 
-    return render_template('map.html', data=data, locations=locations)
+    return render_template('map.html', data=data, locations=locations, rec_name = recommanded_name_gl)
 
 @app.route('/userdata')
 def userdata():

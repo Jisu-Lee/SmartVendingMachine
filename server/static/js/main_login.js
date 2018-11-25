@@ -82,9 +82,9 @@ $(document).ready(function() {
                 contentType: 'application/json;charset=UTF-8',
                 success: function(response) {
                     if(response["status"] == "ok"){
-                        window.location.href='http://127.0.0.1:8080/list';
+                        window.location.href='https://wannagraduate-220706.appspot.com/list';
                     }else{
-                        window.location.href='http://127.0.0.1:8080/login'
+                        window.location.href='https://wannagraduate-220706.appspot.com/login';
                     }
                 },
                 error: function(error) {

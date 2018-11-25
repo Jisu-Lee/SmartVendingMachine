@@ -1,7 +1,7 @@
 
 function addDynamicCosmetic(NO, name, price, score, type, fav_flag){
-  imgNo = (NO%5)+1;
-  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a href="detail/'+NO+'.html"><img src="/static/images/'+imgNo+'.jpg") }}" alt="'+name+'" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
+  imgNo = (Math.floor(Math.random() * 10)) % 3 + 1;
+  var template = '<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 work-item"><a ><img src="/static/images/'+type+"_"+imgNo+'.jpg") }}" alt="'+name+'" class="img-responsive"><h3 class="fh5co-work-title">'+name+'</h3>$'+price+'</a><span class="fa fa-star " id="cos'+NO+'" style="float: right">'+' '+score+'</span></div>';
   $("#"+type).append(template);
 
   if(fav_flag == true){
