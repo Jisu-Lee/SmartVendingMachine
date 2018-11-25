@@ -34,6 +34,8 @@ infoWindow = new google.maps.InfoWindow;
               lng: position.coords.longitude
             };
 
+            latitude = pos.lat;
+            longitude = pos.lng;
             console.log(pos);
             infoWindow.setPosition(pos);
             infoWindow.setContent('You&apos;re in here.');
@@ -47,68 +49,76 @@ infoWindow = new google.maps.InfoWindow;
           handleLocationError(false, infoWindow, map.getCenter());
         }
 
+setTimeout(function(){
+  var infowindow = new google.maps.InfoWindow();
 
-     var infowindow = new google.maps.InfoWindow();
-
-     var marker, i;
+  var marker, i;
 
 
-     var idx = getNearestMachine(latitude, longitude, locations);
-     var pinColor = "4286f4";
-    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-        new google.maps.Size(21, 34),
-        new google.maps.Point(0,0),
-        new google.maps.Point(10, 34));
-    var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-        new google.maps.Size(40, 37),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(12, 35));
+  var idx = getNearestMachine(latitude, longitude, locations);
+  var pinColor = "4286f4";
+ var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+     new google.maps.Size(21, 34),
+     new google.maps.Point(0,0),
+     new google.maps.Point(10, 34));
+ var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+     new google.maps.Size(40, 37),
+     new google.maps.Point(0, 0),
+     new google.maps.Point(12, 35));
 
-     for (i = 0; i < locations.length; i++) {
-       if(i == idx){
-         marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i][2], locations[i][3]),
-                map: map,
-                icon: pinImage,
-                shadow: pinShadow
-            });
-       }
-       else{
-         marker = new google.maps.Marker({
-           position: new google.maps.LatLng(locations[i][2], locations[i][3]),
-           map: map
+  for (i = 0; i < locations.length; i++) {
+    if(i == idx){
+      marker = new google.maps.Marker({
+             position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+             map: map,
+             icon: pinImage,
+             shadow: pinShadow
          });
-        }
-       google.maps.event.addListener(marker, 'click', (function(marker, i) {
-         return function() {
-           console.log(locations[i][0])
-           idx = locations[i][0]
-           infowindow.setContent(locations[i][1]);
-           infowindow.open(map, marker);
-           setModalData(idx);
-           var modal = document.getElementById('myModal');
-           // Get the <span> element that closes the modal
-           var span = document.getElementsByClassName("close")[0];
-           modal.style.display = "block";
-           // When the user clicks the button, open the modal
-           // When the user clicks on <span> (x), close the modal
-           span.onclick = function() {
-               $("#modal_data").remove();
-               modal.style.display = "none";
-           }
-
-           // When the user clicks anywhere outside of the modal, close it
-           window.onclick = function(event) {
-               if (event.target == modal) {
-                   $("#modal_data").remove();
-                   modal.style.display = "none";
-               }
-           }
-         }
-       })(marker, i));
+    }
+    else{
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+        map: map
+      });
      }
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      return function() {
+        console.log(locations[i][0])
+        idx = locations[i][0]
+        infowindow.setContent(locations[i][1]);
+        infowindow.open(map, marker);
+        setModalData(idx);
+        var modal = document.getElementById('myModal');
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        modal.style.display = "block";
+        // When the user clicks the button, open the modal
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            $("#modal_data").remove();
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                $("#modal_data").remove();
+                modal.style.display = "none";
+            }
+        }
+      }
+    })(marker, i));
+  }
+}, 3000);
+
 }
 
+function setMarker(){
+  //return new Promise({
+
+
+  //});
+}
 
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -184,6 +194,7 @@ $(document).ready(function(e) {
 console.log(locations);
 
     addLocation(latitude, longitude);
+
     addLocationData(locations);
 
 });

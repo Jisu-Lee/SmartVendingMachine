@@ -163,7 +163,7 @@ span.onclick = function() {
                                         	if(response["status"] == "ok"){
 
                                             	$('#cos'+cosmetic_id).css("color", "orange");
-                                            	alert("debug");
+                                            	//alert("debug");
                                         	window.location.href='https://wannagraduate-220706.appspot.com/list';
                                         }
                                         },
