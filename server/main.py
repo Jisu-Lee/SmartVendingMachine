@@ -136,8 +136,8 @@ def updatefav():
         else:
             query = ds.query(kind='favorite')
             query.add_filter('cosmetic_id', '=', str(uid))
-            query.add_fileter('user_id', '=', str(uid))
-            query.add_fileter('rating', '=', str(rating))
+            query.add_filter('user_id', '=', str(uid))
+            query.add_filter('rating', '=', str(rating))
             entity = query.fetch()
             ds.delete(entity.key)
         return json.dumps({'status':'ok'})
