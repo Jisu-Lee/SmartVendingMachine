@@ -101,9 +101,11 @@ span.onclick = function() {
                                                   contentType: 'application/json;charset=UTF-8',
                                                   success: function(response) {
                                                       console.log(response);
-                                                      if(reponse["status"] == "ok"){
+                                                      if(response["status"] == "ok"){
 	                                                    $('#cos'+cosmetic_id).css("color", "gray");
-	                                                    window.location.href='https://wannagraduate-220706.appspot.com/list'
+
+	                                                    //window.location.href='https://wannagraduate-220706.appspot.com/list'
+                                                      	
                                                       }
 
                                                   },
@@ -164,7 +166,7 @@ span.onclick = function() {
 
                                             	$('#cos'+cosmetic_id).css("color", "orange");
                                             	//alert("debug");
-                                        	window.location.href='https://wannagraduate-220706.appspot.com/list';
+                                        	//window.location.href='https://wannagraduate-220706.appspot.com/list';
                                         }
                                         },
                                         error: function(error) {

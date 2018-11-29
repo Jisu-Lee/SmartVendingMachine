@@ -36,7 +36,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 user_id = 1
 userInfo = [{"birthyear": "1995", "gender": "male", "id": "1", "name": "Leland", "pw": "9771", "skintype": "dry", "user_id": "Leland"}]
-recommanded_name_gl = ['Nail File', 'EXTRA Soothing Balm', 'EXTRA Balm Rinse', 'No Smudge Mascara', 'Hydrating Face Tonic', 'Pot Rouge for Lips \\u0026 Cheeks', 'Eye Paint Eye Shadow', 'Soothing Cleansing Oil', 'Body Pigment Powder Pearl']
+recommanded_name_gl = []
 
 def getCosmeticsWithFav():
     ds = datastore.Client()
@@ -92,10 +92,41 @@ def getlogin():
                 return json.dumps({'status':'ok'})
     return json.dumps({'status':'fail'})
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if(request.method == 'POST'):
+        if(request.json):
+    #    var data = [name, skin_type, birth_year, gender, password];  //id = userID, data = cosmeticID
+            data = request.json
+            name = data["data"][0]
+            skintype = data["data"][1]
+            birthyear = data["data"][2]
+            gender = data["data"][3]
+            pw = data["data"][4]
 
-    return render_template('signup.html')
+            ds = datastore.Client()
+
+            query = ds.query(kind='user')
+            entities = query.fetch()
+            users = list(entities)
+            num_of_user = len(users)
+
+            entity = datastore.Entity(key=ds.key('user'))
+            entity.update({
+                'id': str(num_of_user),
+                'user_id':name,
+                'name':name,
+                'skintype':skintype,
+                'birthyear':birthyear,
+                'gender':gender,
+                'pw':pw
+                })
+            ds.put(entity)
+            return json.dumps({'status':'ok'})
+        else:
+            return json.dumps({'status':'fail'})
+    else:
+        return render_template('signup.html')
 
 @app.route('/list')
 def getlist():
@@ -140,12 +171,11 @@ def updatefav():
             ds.put(entity)
         else:
             query = ds.query(kind='favorite')
-            query.add_filter('cosmetic_id', '=', str(uid))
+            query.add_filter('cosmetic_id', '=', str(cid))
             query.add_filter('user_id', '=', str(uid))
-            query.add_filter('rating', '=', str(rating))
             entity = query.fetch()
-            ds.delete(entity.key.id)
-        return json.dumps({'status':'ok'})
+            ds.delete_multi([x.key for x in entity])
+        return json.dumps({'status':'ok', 'cosmetic_id':cid, 'user_id':uid, 'rating':rating})
     return json.dumps({'status':'fail'})
 
 @app.route('/test')
@@ -169,7 +199,7 @@ def recommand():
     entity = query.fetch(limit=1)
     userInfo = list(entity)
     # get users with same skintype
-    skintype = "dry"
+    skintype = userInfo[0]['skintype']
     query = ds.query(kind='user')
     query.add_filter('skintype', '=', str(skintype))
     entity = query.fetch()

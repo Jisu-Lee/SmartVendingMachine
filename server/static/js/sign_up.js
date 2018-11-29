@@ -46,8 +46,7 @@ alert("ss");
                         contentType: 'application/json;charset=UTF-8',
                         success: function(response) {
                             console.log(response);
-                            if(reponse["status"] == "ok"){
-                            $('#cos'+cosmetic_id).css("color", "gray");
+                            if(response["status"] == "ok"){
                             window.location.href='https://wannagraduate-220706.appspot.com/login'
                             }
 
