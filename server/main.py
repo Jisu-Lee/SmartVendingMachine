@@ -92,6 +92,11 @@ def getlogin():
                 return json.dumps({'status':'ok'})
     return json.dumps({'status':'fail'})
 
+@app.route('/signup')
+def signup():
+
+    return render_template('signup.html')
+
 @app.route('/list')
 def getlist():
     cosmetics = getCosmeticsWithFav()
@@ -139,9 +144,20 @@ def updatefav():
             query.add_filter('user_id', '=', str(uid))
             query.add_filter('rating', '=', str(rating))
             entity = query.fetch()
-            ds.delete(entity.key)
+            ds.delete(entity.key.id)
         return json.dumps({'status':'ok'})
     return json.dumps({'status':'fail'})
+
+@app.route('/test')
+def test():
+    ds = datastore.Client()
+    query = ds.query(kind='favorite')
+    query.add_filter('cosmetic_id', '=', str(7))
+    query.add_filter('user_id', '=', str(8))
+    query.add_filter('rating', '=', str(1.7))
+    entity = query.fetch()
+    ds.delete_multi([x.key for x in entity])
+    return "done"
 
 # local debugging
 @app.route('/recommand')
