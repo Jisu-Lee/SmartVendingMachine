@@ -200,6 +200,10 @@ def map():
 def userdata():
     return render_template('userdata.html', user=userInfo)
 
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')
