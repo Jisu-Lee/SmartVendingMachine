@@ -52,26 +52,74 @@ infoWindow = new google.maps.InfoWindow;
 setTimeout(function(){
   var infowindow = new google.maps.InfoWindow();
 
-  var marker, i;
+  var marker, i, most_rec_ven=0, max = 0, temp=0;
 
 
   var idx = getNearestMachine(latitude, longitude, locations);
-  var pinColor = "4286f4";
- var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+  var pinColor_blue = "4286f4";
+  var pinColor_yellow = "f4eb42";
+  var pinColor_green = "f4eb42";
+ var pinImage_blue = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor_blue,
      new google.maps.Size(21, 34),
      new google.maps.Point(0,0),
      new google.maps.Point(10, 34));
+ var pinImage_yellow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor_yellow,
+    new google.maps.Size(21, 34),
+    new google.maps.Point(0,0),
+    new google.maps.Point(10, 34));
+var pinImage_green = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor_green,
+    new google.maps.Size(21, 34),
+    new google.maps.Point(0,0),
+    new google.maps.Point(10, 34));
  var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
      new google.maps.Size(40, 37),
      new google.maps.Point(0, 0),
      new google.maps.Point(12, 35));
+
+     for(var i=0; i<data.length; i++){
+       temp = 0;
+         for(var j=1; j<data[i].length; j++){
+           for(var k=0; k<rec_name.length; k++){
+               if(rec_name[k] == data[i][j][0]){
+                 temp++;
+                 //console.log(rec_name[k]);
+               }
+           }
+         }
+
+         if(max < temp) {
+           //console.log("temp: "+temp+"max: "+max);
+           max = temp;
+           most_rec_ven = data[i][0];
+         }
+         //console.log(data[i][0]+"/"+most_rec_ven+"/"+temp);
+
+
+     }
+
 
   for (i = 0; i < locations.length; i++) {
     if(i == idx){
       marker = new google.maps.Marker({
              position: new google.maps.LatLng(locations[i][2], locations[i][3]),
              map: map,
-             icon: pinImage,
+             icon: pinImage_blue,
+             shadow: pinShadow
+         });
+    }
+    else if(locations[i][0] == most_rec_ven){
+      marker = new google.maps.Marker({
+             position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+             map: map,
+             icon: pinImage_yellow,
+             shadow: pinShadow
+         });
+    }
+    else if(idx == most_rec_ven){
+      marker = new google.maps.Marker({
+             position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+             map: map,
+             icon: pinImage_green,
              shadow: pinShadow
          });
     }
@@ -109,7 +157,7 @@ setTimeout(function(){
       }
     })(marker, i));
   }
-}, 3000);
+}, 1000);
 
 }
 
@@ -190,7 +238,11 @@ function setModalData(idx){
 $(document).ready(function(e) {
     //initMap();
     //multiple location
+//var data_ = data.sort();
+//var locations_ = locations.sort();
 
+//data = data_;
+//locations = locations_;
 console.log(locations);
 
     addLocation(latitude, longitude);
