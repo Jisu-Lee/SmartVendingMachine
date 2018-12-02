@@ -105,7 +105,7 @@ span.onclick = function() {
 	                                                    $('#cos'+cosmetic_id).css("color", "gray");
 
 	                                                    //window.location.href='https://wannagraduate-220706.appspot.com/list'
-                                                      	
+
                                                       }
 
                                                   },

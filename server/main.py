@@ -190,8 +190,8 @@ def test():
     return "done"
 
 # local debugging
-@app.route('/recommand')
-def recommand():
+@app.route('/recommend')
+def recommend():
     ds = datastore.Client()
     # get user data
     query = ds.query(kind='user')
@@ -231,7 +231,7 @@ def recommand():
                 recommanded_cos.append(cosmetics[j])
                 break
 
-    return render_template('recommand.html', recommanded_cos=recommanded_cos, similarCos=similarCos, similarUser=similarUser, allRating=allRating)
+    return render_template('recommend.html', recommanded_cos=recommanded_cos, similarCos=similarCos, similarUser=similarUser, allRating=allRating)
 
 def recommand_product_type(user_id, similar_user_num, content_num, similarUser, similarCos, allRating, product_type):
     similarCos = clustered_by_product_type(similarCos, product_type)

@@ -1,5 +1,8 @@
-latitude = 37.5031256;
-longitude = 126.9570334;
+
+latitude = 37.507126;
+longitude = 126.958049;
+//latitude = 37.5031256;
+//longitude = 126.9570334;
 /*
 var rec_name = ["mascara", "AC cream", ...]
 var data = [
@@ -26,7 +29,7 @@ function addLocation(lat, lng){
      });
 infoWindow = new google.maps.InfoWindow;
 
-     if (navigator.geolocation) {
+     if (!navigator.geolocation) {
 
           navigator.geolocation.getCurrentPosition(function(position) {
             var pos = {
@@ -58,7 +61,12 @@ setTimeout(function(){
   var idx = getNearestMachine(latitude, longitude, locations);
   var pinColor_blue = "4286f4";
   var pinColor_yellow = "f4eb42";
-  var pinColor_green = "f4eb42";
+  var pinColor_green = "77c649";
+  var pinColor_red = "ea4a38";
+  var pinImage_red = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor_red,
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0,0),
+      new google.maps.Point(10, 34));
  var pinImage_blue = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor_blue,
      new google.maps.Size(21, 34),
      new google.maps.Point(0,0),
@@ -88,47 +96,69 @@ var pinImage_green = new google.maps.MarkerImage("http://chart.apis.google.com/c
          }
 
          if(max < temp) {
-           //console.log("temp: "+temp+"max: "+max);
+           console.log("temp: "+temp+"max: "+max);
            max = temp;
            most_rec_ven = data[i][0];
          }
-         //console.log(data[i][0]+"/"+most_rec_ven+"/"+temp);
+         console.log(data[i][0]+"/"+most_rec_ven+"/"+temp);
 
 
      }
 
-
+marker_list=[];
   for (i = 0; i < locations.length; i++) {
-    if(i == idx){
-      marker = new google.maps.Marker({
-             position: new google.maps.LatLng(locations[i][2], locations[i][3]),
-             map: map,
-             icon: pinImage_blue,
-             shadow: pinShadow
-         });
-    }
-    else if(locations[i][0] == most_rec_ven){
-      marker = new google.maps.Marker({
-             position: new google.maps.LatLng(locations[i][2], locations[i][3]),
-             map: map,
-             icon: pinImage_yellow,
-             shadow: pinShadow
-         });
-    }
-    else if(idx == most_rec_ven){
-      marker = new google.maps.Marker({
-             position: new google.maps.LatLng(locations[i][2], locations[i][3]),
-             map: map,
-             icon: pinImage_green,
-             shadow: pinShadow
-         });
-    }
-    else{
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][2], locations[i][3]),
-        map: map
+
+/*
+    marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+      map: map
+    });
+*/
+if(locations[idx][0] == most_rec_ven && locations[i][0] == most_rec_ven && !marker_list.includes(i)){
+  console.log("idx:"+idx+"vec:"+most_rec_ven);
+  marker = new google.maps.Marker({
+
+         position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+         map: map,
+         icon: pinImage_green,
+         shadow: pinShadow
+     });
+     marker_list.push(i);
+}
+if(i == idx && !marker_list.includes(i)){
+  console.log("blue mark here: "+idx+"/"+i);
+  marker = new google.maps.Marker({
+         position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+         map: map,
+         icon: pinImage_blue,
+         shadow: pinShadow
+     });
+marker_list.push(i);
+}
+if(locations[i][0] == most_rec_ven && !marker_list.includes(i)){
+  console.log("yellow mark here: "+locations[i][0]+"/"+most_rec_ven);
+  marker = new google.maps.Marker({
+         position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+         map: map,
+         icon: pinImage_yellow,
+         shadow: pinShadow
+     });
+     marker_list.push(i);
+}
+
+
+
+ if(!marker_list.includes(i)){
+   marker = new google.maps.Marker({
+          position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+          map: map,
+          icon: pinImage_red,
+          shadow: pinShadow
       });
-     }
+      marker_list.push(i);
+
+ }
+
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
       return function() {
         console.log(locations[i][0])
